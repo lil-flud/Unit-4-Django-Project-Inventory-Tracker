@@ -20,9 +20,9 @@ def add_tire(request):
         if form.is_valid():
             form.save()
     context = {"form": form}
-    test_ob = Tire.objects.get(id=3)
-    test = test_ob.condition + 1
-    print(test, test_ob.condition)
+    # test_ob = Tire.objects.get(id=3)
+    # test = test_ob.condition + 1
+    # print(test, test_ob.condition)
     return render(request, "forms_page.html", context)
 
 
