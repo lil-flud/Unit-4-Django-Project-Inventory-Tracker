@@ -18,7 +18,20 @@ def add_tire(request):
         # print(request.POST)
         form = TireForm(request.POST)
         if form.is_valid():
-            form.save()
+            # lucas adjustment
+            brand = form.cleaned_data["brand"]
+            line = form.cleaned_data["line"]
+            size = form.cleaned_data["size"]
+            quantity = form.cleaned_data["quantity"]
+            tire = Tire.objects.filter(brand=brand, line=line, size=size)
+            if len(tire) == 0:
+                form.adjusted_cost = form.adjust_cost()  # dont know if will work
+                form.save()
+            elif len(tire) == 1:
+                tire.quantity += quantity
+                tire.save()
+            else:
+                raise ValueError("Too many tires")
     context = {"form": form}
     test_ob = Tire.objects.get(id=3)
     test = test_ob.condition + 1
@@ -41,3 +54,12 @@ def tire_info(request, tire):
     print(tire)
 
     return render(request, "tire_info.html", {"tire": tire})
+
+
+#TODO
+#SEARCH VIEW
+#Should search for tires given parameters
+#return context with found tires
+#render with search.html
+def search_view(request):
+    return ...
