@@ -30,19 +30,45 @@ class Tire(models.Model):
     base_price = models.FloatField(null=True)
     tread_pattern = models.CharField(max_length=200, null=True, choices=PATTERNS)
     condition = models.IntegerField(null=True, choices=CONDITIONS)
-    adjusted_price = models.FloatField(null=True, blank=True, default = None)
+    adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
 
+#__STR__
+#had to change to strf due to elements being Nonetype and couldn't concatenate
+
     def __str__(self):
-        return self.size + " " + self.brand + " " + self.line
-    
+        return f"{self.size} | {self.brand} | {self.line} | {self.adjusted_price} | {self.quantity}"
+#ADJUST COST
+#adjust the cost for the tire according to condition
+#WORKS
     def adjust_cost(self):
         if self.condition == 4:
             self.adjusted_price = self.base_price
         elif self.condition == 3:
-            self.adjusted_price = self.base_price*.85
+            self.adjusted_price = self.base_price * 0.85
         elif self.condition == 2:
-            self.adjusted_price = self.base_price*.75
+            self.adjusted_price = self.base_price * 0.75
         elif self.condition == 1:
-            self.adjusted_price = self.base_price*.50
+            self.adjusted_price = self.base_price * 0.50
         self.save()
+
+#===GET TIRE===#
+#retrieve tire by brand, line, size, condition
+#if any error occurs, return none
+#else, return the tire
+#TODO
+#create an exception for if multiple tires are returned
+def get_tire(brand, line, size, condition):
+    try:
+        tire = Tire.objects.get(brand=brand, line=line, size=size, condition=condition)
+    except:
+        return None
+    else:
+        return tire
+
+#TODO
+#test this function 
+def update_quantity(brand,line,size,condition,quantity):
+    tire = get_tire(brand,line,size,condition)
+    tire.quantity = quantity
+    return tire
