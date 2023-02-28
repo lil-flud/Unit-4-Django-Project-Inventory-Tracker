@@ -1,0 +1,17 @@
+{% extends 'home.html' %} {% block content %}
+<nav>
+  <h2><a href="{% url 'home' %}">Back To Home Page!</a></h2>
+</nav>
+<br />
+
+<ol>
+  {% for tire in tires %}
+  <li>
+    <a href="tire_info" tire
+      >{{ tire.size }} {{ tire.brand }} {{ tire.line }}</a
+    >
+  </li>
+  {% endfor %}
+</ol>
+
+{% endblock content %}

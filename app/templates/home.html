@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tireapalooza LLC.</title>
+  </head>
+  <body>
+    {% block content %}
+    <h1>Welcome To Tireapalooza!</h1>
+    {% comment %} {% for each in choices %} {% endcomment %}
+    <ol>
+      <li>
+        <a href="{% url 'add_tire_form' %}">Add a tire to the inventory.</a>
+      </li>
+      <li>
+        <a href="{% url 'inventory' %}">View inventory.</a>
+      </li>
+    </ol>
+    {% comment %} {% endfor %} {% endcomment %} {% endblock content %}
+  </body>
+</html>
+{% comment %}
+<li>
+  <a href="{% url 'search_tires' %}">Search current inventory.</a>
+</li>
+{% endcomment %}
