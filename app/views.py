@@ -33,9 +33,9 @@ def add_tire(request):
             else:
                 raise ValueError("Too many tires")
     context = {"form": form}
-    test_ob = Tire.objects.get(id=3)
-    test = test_ob.condition + 1
-    print(test, test_ob.condition)
+    # test_ob = Tire.objects.get(id=3)
+    # test = test_ob.condition + 1
+    # print(test, test_ob.condition)
     return render(request, "forms_page.html", context)
 
 
