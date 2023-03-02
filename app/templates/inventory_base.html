@@ -7,11 +7,14 @@
 <ol>
   {% for tire in tires %}
   <li>
-    <a href="tire_info" tire
+    <a href="{% url 'tire_info' tire.id %}"
       >{{ tire.size }} {{ tire.brand }} {{ tire.line }}</a
     >
   </li>
   {% endfor %}
 </ol>
 
-{% endblock content %}
+{% endblock content %} {% comment %} Logan: Fixed list items to where they now
+correctly link to individual tires, some solution may be possible for use in a
+button that allows the direct updating of a tire when clicked upon instead of
+through the form. {% endcomment %}

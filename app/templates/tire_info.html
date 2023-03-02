@@ -2,5 +2,12 @@
 <nav>
   <h2><a href="{% url 'home' %}">Back To Home Page!</a></h2>
 </nav>
-
-{% endblock content %}
+<h3>Brand: {{ tire.brand }}</h3>
+<h3>Line: {{ tire.line }}</h3>
+<h3>Size: {{tire.size}}</h3>
+<h3>Sell-price: {{ tire.adjusted_price }}</h3>
+<h3>Quantity in stock: {{ tire.quantity }}</h3>
+{% endblock content %} {% comment %} Logan: Basic display of an individual
+tire's info. {% endcomment %} {% comment %} Logan: Potentially add an update
+button so user can adjust quantities directly without having to fill out form.
+{% endcomment %}

@@ -96,8 +96,10 @@ def view_inventory(request):
 # allow user to update the quantity
 # update_quanity() should be in models.py
 # create confirmation message and refresh page with new quantity
-def tire_info(request, tire):
-    current_tire = Tire.objects.filter()
-    print(tire)
 
-    return render(request, "tire_info.html", {"tire": tire})
+
+def tire_info(request, pk):
+    current_tire = Tire.objects.get(id=pk)
+    return render(request, "tire_info.html", {"tire": current_tire})
+    # From Logan: Fixed tire_info so it correctly displays individual tires.
+    # Same style of this solution probably possible for directly updating tire quantities like I mentioned on inventory_base.html and tire_info.html.
