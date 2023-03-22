@@ -33,31 +33,33 @@ class Tire(models.Model):
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
 
-#__STR__
-#had to change to strf due to elements being Nonetype and couldn't concatenate
+    # __STR__
+    # had to change to strf due to elements being Nonetype and couldn't concatenate
 
     def __str__(self):
         return f"{self.size} | {self.brand} | {self.line} | {self.adjusted_price} | {self.quantity}"
-#ADJUST COST
-#adjust the cost for the tire according to condition
-#WORKS
+
+    # ADJUST COST
+    # adjust the cost for the tire according to condition
+    # WORKS
     def adjust_cost(self):
         if self.condition == 4:
-            self.adjusted_price = self.base_price
+            self.adjusted_price = (self.base_price * 0.95) + self.base_price
         elif self.condition == 3:
-            self.adjusted_price = self.base_price * 0.85
+            self.adjusted_price = (self.base_price * 0.85) + self.base_price
         elif self.condition == 2:
-            self.adjusted_price = self.base_price * 0.75
+            self.adjusted_price = (self.base_price * 0.75) + self.base_price
         elif self.condition == 1:
-            self.adjusted_price = self.base_price * 0.50
+            self.adjusted_price = (self.base_price * 0.50) + self.base_price
         self.save()
 
-#===GET TIRE===#
-#retrieve tire by brand, line, size, condition
-#if any error occurs, return none
-#else, return the tire
-#TODO
-#create an exception for if multiple tires are returned
+
+# ===GET TIRE===#
+# retrieve tire by brand, line, size, condition
+# if any error occurs, return none
+# else, return the tire
+# TODO
+# create an exception for if multiple tires are returned
 def get_tire(brand, line, size, condition):
     try:
         tire = Tire.objects.get(brand=brand, line=line, size=size, condition=condition)
@@ -66,9 +68,10 @@ def get_tire(brand, line, size, condition):
     else:
         return tire
 
-#TODO
-#test this function 
-def update_quantity(brand,line,size,condition,quantity):
-    tire = get_tire(brand,line,size,condition)
+
+# TODO
+# test this function
+def update_quantity(brand, line, size, condition, quantity):
+    tire = get_tire(brand, line, size, condition)
     tire.quantity = quantity
     return tire
