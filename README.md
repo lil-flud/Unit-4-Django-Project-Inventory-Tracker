@@ -38,9 +38,10 @@ _views with all permissions_
 
 _authenticated users_
 [] AddTire - AddTireForm
-[] TireDetails - extra permission to click "buy" or "sell"
+[] Tire_Info - extra permission to click "buy" or "sell"
 [] HomePage - extra permission to click "buy" or "sell"
 [] BuyTires - buy tires, generates OutVoice Model
 [] SellTires, sell tires, generates Invoice Model
 [] View Invoices - view invoices
 [] View OutVoices - view OutVoices
+[] DeleteTire
