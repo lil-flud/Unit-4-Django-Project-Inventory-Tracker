@@ -17,11 +17,51 @@ from app import models
 # authenticated users have permission to edit the tire, buy or sell
 # should have a view details for each tire
 # authenticated users should have extra links to add tires, view invoices, view outvoices
+# Logan: I've got a lot of the searchability down, still need to do the size search.
 def home(request):
+    tires_all = Tire.objects.all()
+    # current_user = request.user
+    brand_filter = sorted(list(set(Tire.objects.values_list("brand", flat=True))))
+    line_filter = sorted(list(set(Tire.objects.values_list("line", flat=True))))
+    tread_pattern_filter = sorted(
+        list(set(Tire.objects.values_list("tread_pattern", flat=True)))
+    )
+    tire_list = []
+    tire_list_len_check = False
 
-    choices = ["View Inventory", "Add Tire"]
-    context = {"choices": choices}
-    return render(request, "home.html", context)
+    if request.method == "POST":
+        searched_brand = request.POST["brand"]
+        searched_line = request.POST["line"]
+        searched_tread_pattern = request.POST["tread_pattern"]
+
+        q = {}
+        if searched_brand != "None":
+            q.update({"brand": searched_brand})
+        if searched_line != "None":
+            q.update({"line": searched_line})
+        if searched_tread_pattern != "None":
+            q.update({"tread_pattern": searched_tread_pattern})
+        tire_list = Tire.objects.filter(**q)
+
+        if len(q) == 0 and len(tire_list) == 0 or len(tire_list) == 0:
+            tire_list_len_check = True
+
+        context = {
+            "tire_list_len_check": tire_list_len_check,
+            "brands": brand_filter,
+            "lines": line_filter,
+            "tread_patterns": tread_pattern_filter,
+            "tires": tire_list,
+        }
+        return render(request, "home.html", context)
+    else:
+        context = {
+            "tires": tires_all,
+            "brands": brand_filter,
+            "lines": line_filter,
+            "tread_patterns": tread_pattern_filter,
+        }
+        return render(request, "home.html", context)
 
 
 # ===ADD TIRE VIEW====
@@ -56,7 +96,7 @@ def add_tire(request):
     # test_ob = Tire.objects.get(id=3)
     # test = test_ob.condition + 1
     # print(test, test_ob.condition)
-    return render(request, "forms_page.html", context)
+    return render(request, "add_tire.html", context)
 
 
 # ===VIEW INVENTORY FUN===

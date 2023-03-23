@@ -7,18 +7,68 @@
     <title>Tireapalooza LLC.</title>
   </head>
   <body>
+    <nav id="navbar">
+      <a href="{% url 'home' %}">Home Page</a>
+      <a href="{% url 'add_tire_form' %}">Add Tire</a>
+    </nav>
     {% block content %}
-    <h1>Welcome To Tireapalooza!</h1>
-    {% comment %} {% for each in choices %} {% endcomment %}
-    <ol>
-      <li>
-        <a href="{% url 'add_tire_form' %}">Add a tire to the inventory.</a>
-      </li>
-      <li>
-        <a href="{% url 'inventory' %}">View inventory.</a>
-      </li>
-    </ol>
-    {% comment %} {% endfor %} {% endcomment %} {% endblock content %}
+    <form action="{% url 'home' %}" method="POST">
+      {% csrf_token %}
+      <label>Brands:</label>
+      <select name="brand" id="brand">
+        <option value="None">No Filter</option>
+        {% for each in brands %}
+        <option value="{{ each }}">{{ each }}</option>
+        {% endfor %}
+      </select>
+      <label>Lines:</label>
+      <select name="line" id="line">
+        <option value="None">No Filter</option>
+        {% for each in lines %}
+        <option value="{{ each }}">{{ each }}</option>
+        {% endfor %}
+      </select>
+      <label>Tread Patterns:</label>
+      <select name="tread_pattern" id="tread_pattern">
+        <option value="None">No Filter</option>
+        {% for each in tread_patterns %}
+        <option value="{{ each }}">{{ each }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Search" />
+    </form>
+    <table>
+      <tr>
+        <th>Size</th>
+        <th>Brand</th>
+        <th>Line</th>
+        <th>Quantity</th>
+      </tr>
+      {% for tire in tires %}
+      <tr>
+        <th>
+          <a href="{% url 'tire_info' tire.id %}"> {{ tire.size }} </a>
+        </th>
+        <th>
+          <a href="{% url 'tire_info' tire.id %}"> {{ tire.brand }} </a>
+        </th>
+        <th>
+          <a href="{% url 'tire_info' tire.id %}"> {{ tire.line }} </a>
+        </th>
+        <th>
+          <a href="{% url 'tire_info' tire.id %}"> {{ tire.quantity }} </a>
+        </th>
+      </tr>
+      {% endfor %} {% if tire_list_len_check %}
+      <tr>
+        <th>There are currently no tires that meet your specific criteria!</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      {% endif %}
+    </table>
+    {% endblock content %}
   </body>
 </html>
 {% comment %}

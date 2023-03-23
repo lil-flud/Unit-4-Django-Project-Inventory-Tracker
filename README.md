@@ -1,7 +1,7 @@
 # Unit-4-Django-Project-Inventory-Tracker
 
 _Roles_
-[] website to everyone without an account
+[] website viewable by everyone without an account
 [] authenticated users are able to change inventory and edit
 _authenticated_users_
 [] add, update quantity, delete tires
@@ -13,13 +13,13 @@ _unauthenticated_users_
 [] view tire details for one tire
 
 _Models, Forms and Relational Databases_
-[] individual users are salespeople, when quantity is updates, the receipt will be created for future purposes
+[] individual users are salespeople, when quantity is updated, the receipt will be created for future purposes
 [] receipts cannot be deleted by anyone but superuser
 
 **Models**
 [] User -- Django User
 [] Invoice -- Date of sale, list of items sold, user that sold items, price of all items, total price
-[] Outvoice -- date of sale, list of items bought, user that bought itmes, price of all items, total price, expected arrival
+[] Outvoice -- date of sale, list of items bought, user that bought items, price of all items, total price, expected arrival
 [] Tire -- brand, line, size, mileage_rating, base_price, tread_pattern, condition, adjusted price, quantity
 
 **Forms**
