@@ -1,10 +1,20 @@
 {% extends 'home.html' %} {% block content %}
+
+
 <form action="{% url 'add_tire_form' %}" method="POST">
-  {% csrf_token %} {{ form.as_p }}
-
-  <button type="submit">Submit</button>
+  {% csrf_token %}
+  <table>
+  {% for field in form %}
+  <tr>
+  <td>{{field.label}}</td>
+  <td>{{field}}</td>
+  </tr>
+  {% endfor %}
+  </table>
+  <button type="submit">Add Tire</button>
 </form>
-
+{{successMessage}}
+{{errorMessage}}
 {% endblock content %} {% comment %} Needs the form to be fully built out,
 should mention that when giving the size dashes should be used like in real
 sizes. Ex: "255-65-17" {% endcomment %}
