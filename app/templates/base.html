@@ -14,6 +14,8 @@
     <nav id="navbar">
       <a href="{% url 'home' %}">Home Page</a>
       <a href="{% url 'add_tire_form' %}">Add Tire</a>
+      {% if not user.is_authenticated %}
+      <a href="{% url 'register' %}">Employee Registration</a>
       {% endblock %}
       <!-- prettier-ignore -->
       {% block content %}
