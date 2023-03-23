@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block content %}
+
+  <h1>Squids Tires: Employee Registration</h1>
+
+  <form method="post" action="">
+    {% csrf_token %}
+    <table>
+      {{ form.as_p }}
+      <input type="submit" name="submit" />
+      </tr>
+    </table>
+  </form>
+  {{form.errors}}
+{% endblock content %}

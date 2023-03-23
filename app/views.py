@@ -2,6 +2,8 @@ from django.shortcuts import render
 from app.forms import TireForm
 from app.models import *
 from app import models
+from .decorators import unauthenticated_user
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
@@ -189,8 +191,15 @@ def delete_tire(request):
 # ===================USER REGISTRATION AND LOGIN================
 
 
+@unauthenticated_user
 def registerView(request):
-    context = {}
+    form = UserCreationForm()
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    context = {"form": form}
     return render(request, "register.html", context)
 
 
