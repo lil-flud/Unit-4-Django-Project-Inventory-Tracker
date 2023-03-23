@@ -14,6 +14,8 @@
     {% block content %}
     <form action="{% url 'home' %}" method="POST">
       {% csrf_token %}
+      <label>Size:</label>
+      <input name="size" type="text" required="False" value="None" />
       <label>Brands:</label>
       <select name="brand" id="brand">
         <option value="None">No Filter</option>

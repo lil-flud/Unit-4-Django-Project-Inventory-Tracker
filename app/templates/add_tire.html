@@ -1,11 +1,10 @@
 {% extends 'home.html' %} {% block content %}
-<nav>
-  <h2><a href="{% url 'home' %}">Back To Home Page!</a></h2>
-</nav>
 <form action="{% url 'add_tire_form' %}" method="POST">
   {% csrf_token %} {{ form.as_p }}
 
   <button type="submit">Submit</button>
 </form>
 
-{% endblock content %}
+{% endblock content %} {% comment %} Needs the form to be fully built out,
+should mention that when giving the size dashes should be used like in real
+sizes. Ex: "255-65-17" {% endcomment %}

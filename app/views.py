@@ -21,6 +21,8 @@ from app import models
 def home(request):
     tires_all = Tire.objects.all()
     # current_user = request.user
+    logged_in_check = logged_in_check_function(request)
+    size_filter = sorted(list(set(Tire.objects.values_list("size", flat=True))))
     brand_filter = sorted(list(set(Tire.objects.values_list("brand", flat=True))))
     line_filter = sorted(list(set(Tire.objects.values_list("line", flat=True))))
     tread_pattern_filter = sorted(
@@ -30,20 +32,23 @@ def home(request):
     tire_list_len_check = False
 
     if request.method == "POST":
+        searched_size = request.POST["size"]
         searched_brand = request.POST["brand"]
         searched_line = request.POST["line"]
         searched_tread_pattern = request.POST["tread_pattern"]
 
         q = {}
+        if searched_size != "None":
+            q.update({"size": searched_size})
         if searched_brand != "None":
             q.update({"brand": searched_brand})
         if searched_line != "None":
             q.update({"line": searched_line})
         if searched_tread_pattern != "None":
             q.update({"tread_pattern": searched_tread_pattern})
-        tire_list = Tire.objects.filter(**q)
+        filtered_tire_list = Tire.objects.filter(**q)
 
-        if len(q) == 0 and len(tire_list) == 0 or len(tire_list) == 0:
+        if len(q) == 0 and len(filtered_tire_list) == 0 or len(filtered_tire_list) == 0:
             tire_list_len_check = True
 
         context = {
@@ -51,7 +56,8 @@ def home(request):
             "brands": brand_filter,
             "lines": line_filter,
             "tread_patterns": tread_pattern_filter,
-            "tires": tire_list,
+            "tires": filtered_tire_list,
+            "logged_in": logged_in_check,
         }
         return render(request, "home.html", context)
     else:
@@ -60,6 +66,7 @@ def home(request):
             "brands": brand_filter,
             "lines": line_filter,
             "tread_patterns": tread_pattern_filter,
+            "logged_in": logged_in_check,
         }
         return render(request, "home.html", context)
 
@@ -190,3 +197,13 @@ def registerView(request):
 def loginView(request):
     context = {}
     return render(request, "login.html", context)
+
+
+# =======EXTRA FUNCTIONS AND CHECKS=======#
+
+
+def logged_in_check_function(request):
+    logged_in_check = False
+    if request.user in User.objects.all():
+        logged_in_check = True
+    return logged_in_check
