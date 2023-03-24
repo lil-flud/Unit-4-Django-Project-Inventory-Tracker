@@ -4,6 +4,7 @@ from app.models import *
 from app import models
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -79,6 +80,7 @@ def home(request):
 # IMPORTANT: on form.save(), be sure to adjust the cost as well according to tire condition using tireobject.adjust_cost()
 # render with forms_page.html
 # path name = "add_tire_form"
+@login_required
 def add_tire(request):
     form = TireForm()
     successMessage = ""
@@ -156,6 +158,7 @@ def tire_info(request, pk):
 # quantity can not be negative
 # create_outvoice() on form submit
 # TODO: implement
+@login_required
 def buy_tires(request, pk):
     context = {}
     return render(request, "buy_tires.html", context)
@@ -166,6 +169,7 @@ def buy_tires(request, pk):
 # quantity can not be more than the amount of tires in inventory
 # create_invoice() on form submit
 # TODO: implement
+@login_required
 def sell_tires(request, pk):
     context = {}
     return render(request, "sell_tires.html", context)
@@ -174,6 +178,7 @@ def sell_tires(request, pk):
 # ===VIEW INVOICES====
 # user should be able to view all details of items of the Invoice model
 # TODO: implement
+@login_required
 def view_invoices(request):
     context = {}
     return render(request, "view_invoices.html", context)
@@ -182,6 +187,7 @@ def view_invoices(request):
 # ==VIEW OUTVOICES====
 # user should be able to view all details of items of the Outvoice model
 # TODO: implement
+@login_required
 def view_outvoices(request):
     context = {}
     return render(request, "view_outvoices.html", context)
@@ -191,6 +197,7 @@ def view_outvoices(request):
 # user will be able to delete tire
 # please add confirmation message before deletion
 # TODO: implement
+@login_required
 def delete_tire(request):
     context = {}
     return render(request, "delete_tire.html", context)
@@ -211,6 +218,7 @@ def registerView(request):
     return render(request, "register.html", context)
 
 
+@unauthenticated_user
 def loginView(request):
     context = {}
     return render(request, "login.html", context)
@@ -219,6 +227,7 @@ def loginView(request):
 # =======EXTRA FUNCTIONS AND CHECKS=======#
 
 
+@login_required
 def logged_in_check_function(request):
     logged_in_check = False
     if request.user in User.objects.all():
