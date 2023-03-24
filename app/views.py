@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-<<<<<<< HEAD
 from app.forms import TireForm
 from app.models import *
 from app import models
@@ -7,7 +6,6 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
-=======
 from app.forms import *
 from app.models import *
 from app import models
@@ -15,7 +13,6 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 import re
->>>>>>> 4d9d78ef2d9a9ead7868b8d1339bf5688c903512
 
 # Create your views here.
 
