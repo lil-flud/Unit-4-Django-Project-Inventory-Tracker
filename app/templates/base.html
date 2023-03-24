@@ -23,9 +23,12 @@
       {% if request.path != "/" %}
       <a href="{% url 'home' %}">Home Page</a>
       {% endif %}
-      <!-- prettier-ignore -->
+      
       {% if request.path != "/add_tire/" %}
+      {% if user.is_authenticated %}
       <a href="{% url 'add_tire_form' %}">Add Tire</a>
+      {% endif %}
+      <!-- prettier-ignore -->
       {% endif %}
       <!-- prettier-ignore -->
       {% if not user.is_authenticated %}
