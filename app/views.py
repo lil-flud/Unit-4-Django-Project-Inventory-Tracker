@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from app.forms import TireForm
+from app.forms import *
 from app.models import *
 from app import models
 from .decorators import unauthenticated_user
@@ -81,6 +81,9 @@ def home(request):
 # path name = "add_tire_form"
 def add_tire(request):
     form = TireForm()
+    successMessage = ""
+    errorMessage = ""
+    context = {"form": form}
     if request.method == "POST":
         # print(request.POST)
         form = TireForm(request.POST)
@@ -101,7 +104,13 @@ def add_tire(request):
                 tire.quantity += quantity
                 tire.save()
                 print(tire)
-    context = {"form": form}
+            successMessage = "Tire successfully added"
+            context["successMessage"] = successMessage
+        else:
+            errorMessage = "There was a problem adding a new tire."
+            context["errorMessage"] = errorMessage
+            
+
     # test_ob = Tire.objects.get(id=3)
     # test = test_ob.condition + 1
     # print(test, test_ob.condition)
@@ -193,9 +202,9 @@ def delete_tire(request):
 
 @unauthenticated_user
 def registerView(request):
-    form = UserCreationForm()
+    form = CreateUserForm()
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("login")
