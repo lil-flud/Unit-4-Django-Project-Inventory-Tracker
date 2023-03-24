@@ -4,6 +4,7 @@ from app.models import *
 from app import models
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm
+import re
 
 # Create your views here.
 
@@ -92,29 +93,39 @@ def add_tire(request):
             brand = form.cleaned_data["brand"]
             line = form.cleaned_data["line"]
             size = form.cleaned_data["size"]
-            quantity = form.cleaned_data["quantity"]
-            condition = form.cleaned_data["condition"]
-            tire = models.get_tire(brand, line, size, condition)
-            if tire == None:
-                form.save()
-                formtire = models.get_tire(brand, line, size, condition)
-                formtire.adjust_cost()
-                formtire.save()
-            elif tire:
-                tire.quantity += quantity
-                tire.save()
-                print(tire)
-            successMessage = "Tire successfully added"
-            context["successMessage"] = successMessage
+            # TODO: function to re match of size to correct pattern
+            if not correct_pattern(size):
+                context[
+                    "wrongPattern"
+                ] = "Please enter the size in the format of XXX-XX-XX."
+                pass
+            else:
+                quantity = form.cleaned_data["quantity"]
+                condition = form.cleaned_data["condition"]
+                tire = models.get_tire(brand, line, size, condition)
+                if tire == None:
+                    form.save()
+                    formtire = models.get_tire(brand, line, size, condition)
+                    formtire.adjust_cost()
+                    formtire.save()
+                elif tire:
+                    tire.quantity += quantity
+                    tire.save()
+                    print(tire)
+                successMessage = "Tire successfully added"
+                context["successMessage"] = successMessage
         else:
             errorMessage = "There was a problem adding a new tire."
             context["errorMessage"] = errorMessage
-            
 
     # test_ob = Tire.objects.get(id=3)
     # test = test_ob.condition + 1
     # print(test, test_ob.condition)
     return render(request, "add_tire.html", context)
+
+
+def correct_pattern(string):
+    return bool(re.match("[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]", string))
 
 
 # ===VIEW INVENTORY FUN===
