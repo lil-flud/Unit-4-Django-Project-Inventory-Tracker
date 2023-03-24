@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from app.forms import *
 from app.models import *
 from app import models
@@ -109,7 +109,6 @@ def add_tire(request):
         else:
             errorMessage = "There was a problem adding a new tire."
             context["errorMessage"] = errorMessage
-            
 
     # test_ob = Tire.objects.get(id=3)
     # test = test_ob.condition + 1
