@@ -95,11 +95,8 @@ def add_tire(request):
             brand = form.cleaned_data["brand"]
             line = form.cleaned_data["line"]
             size = form.cleaned_data["size"]
-            # TODO: function to re match of size to correct pattern
+            # call correct pattern to check file format
             if not correct_pattern(size):
-                context[
-                    "wrongPattern"
-                ] = "Please enter the size in the format of XXX-XX-XX."
                 pass
             else:
                 quantity = form.cleaned_data["quantity"]
@@ -126,8 +123,15 @@ def add_tire(request):
     return render(request, "add_tire.html", context)
 
 
+# ====CORRECT PATTERN====#
+# formatting of size must be in XXX-XX-XX format with numbers only
+# saving of tire should fail if this returns false
 def correct_pattern(string):
-    return bool(re.match("[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]", string))
+    return (
+        bool(re.match("[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]", string))
+        or bool(re.match("[0-9][0-9] x [0-9][0-9].[0-9][0-9]-[0-9][0-9]", string))
+        or bool(re.match("[0-9].[0-9][0-9] x [0-9]", string))
+    )
 
 
 # ===VIEW INVENTORY FUN===

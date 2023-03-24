@@ -8,6 +8,12 @@
   <tr>
   <td>{{field.label}}</td>
   <td>{{field}}</td>
+  {% if field.label == "Size" %}
+
+
+  <td>Please enter the size in one of the following formats:<br>NNN-NN-NN<br>NN x NN.NN-NN<br>N.NN x N</td>
+  {% endif %}
+
   </tr>
   {% endfor %}
   </table>
