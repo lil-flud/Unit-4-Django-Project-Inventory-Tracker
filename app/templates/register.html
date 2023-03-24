@@ -5,10 +5,18 @@
   <form method="post" action="">
     {% csrf_token %}
     <table>
-      {{ form.as_p }}
-      <input type="submit" name="submit" />
-      </tr>
+        {% for field in form %}
+        <tr>
+            <td>{{field.label}}</td>
+                <td>{{field}}</td>
+        </tr>
+        {% endfor %}
     </table>
+<input type="submit" name="submit" />
   </form>
+
+  {% for message in messages %}
+  {{message}}
+  {% endfor %}
   {{form.errors}}
 {% endblock content %}

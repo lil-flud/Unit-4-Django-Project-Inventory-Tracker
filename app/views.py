@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+<<<<<<< HEAD
 from app.forms import TireForm
 from app.models import *
 from app import models
@@ -6,6 +7,15 @@ from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
+=======
+from app.forms import *
+from app.models import *
+from app import models
+from .decorators import unauthenticated_user
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+import re
+>>>>>>> 4d9d78ef2d9a9ead7868b8d1339bf5688c903512
 
 # Create your views here.
 
@@ -81,8 +91,12 @@ def home(request):
 # IMPORTANT: on form.save(), be sure to adjust the cost as well according to tire condition using tireobject.adjust_cost()
 # render with forms_page.html
 # path name = "add_tire_form"
+@login_required
 def add_tire(request):
     form = TireForm()
+    successMessage = ""
+    errorMessage = ""
+    context = {"form": form}
     if request.method == "POST":
         # print(request.POST)
         form = TireForm(request.POST)
@@ -91,23 +105,43 @@ def add_tire(request):
             brand = form.cleaned_data["brand"]
             line = form.cleaned_data["line"]
             size = form.cleaned_data["size"]
-            quantity = form.cleaned_data["quantity"]
-            condition = form.cleaned_data["condition"]
-            tire = models.get_tire(brand, line, size, condition)
-            if tire == None:
-                form.save()
-                formtire = models.get_tire(brand, line, size, condition)
-                formtire.adjust_cost()
-                formtire.save()
-            elif tire:
-                tire.quantity += quantity
-                tire.save()
-                print(tire)
-    context = {"form": form}
+            # call correct pattern to check file format
+            if not correct_pattern(size):
+                pass
+            else:
+                quantity = form.cleaned_data["quantity"]
+                condition = form.cleaned_data["condition"]
+                tire = models.get_tire(brand, line, size, condition)
+                if tire == None:
+                    form.save()
+                    formtire = models.get_tire(brand, line, size, condition)
+                    formtire.adjust_cost()
+                    formtire.save()
+                elif tire:
+                    tire.quantity += quantity
+                    tire.save()
+                    print(tire)
+                successMessage = "Tire successfully added"
+                context["successMessage"] = successMessage
+        else:
+            errorMessage = "There was a problem adding a new tire."
+            context["errorMessage"] = errorMessage
+
     # test_ob = Tire.objects.get(id=3)
     # test = test_ob.condition + 1
     # print(test, test_ob.condition)
     return render(request, "add_tire.html", context)
+
+
+# ====CORRECT PATTERN====#
+# formatting of size must be in XXX-XX-XX format with numbers only
+# saving of tire should fail if this returns false
+def correct_pattern(string):
+    return (
+        bool(re.match("[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]", string))
+        or bool(re.match("[0-9][0-9] x [0-9][0-9].[0-9][0-9]-[0-9][0-9]", string))
+        or bool(re.match("[0-9].[0-9][0-9] x [0-9]", string))
+    )
 
 
 # ===VIEW INVENTORY FUN===
@@ -150,6 +184,7 @@ def tire_info(request, pk):
 # quantity can not be negative
 # create_outvoice() on form submit
 # TODO: implement
+@login_required
 def buy_tires(request, pk):
     context = {}
     return render(request, "buy_tires.html", context)
@@ -160,6 +195,7 @@ def buy_tires(request, pk):
 # quantity can not be more than the amount of tires in inventory
 # create_invoice() on form submit
 # TODO: implement
+@login_required
 def sell_tires(request, pk):
     context = {}
     return render(request, "sell_tires.html", context)
@@ -168,6 +204,7 @@ def sell_tires(request, pk):
 # ===VIEW INVOICES====
 # user should be able to view all details of items of the Invoice model
 # TODO: implement
+@login_required
 def view_invoices(request):
     context = {}
     return render(request, "view_invoices.html", context)
@@ -176,6 +213,7 @@ def view_invoices(request):
 # ==VIEW OUTVOICES====
 # user should be able to view all details of items of the Outvoice model
 # TODO: implement
+@login_required
 def view_outvoices(request):
     context = {}
     return render(request, "view_outvoices.html", context)
@@ -185,6 +223,7 @@ def view_outvoices(request):
 # user will be able to delete tire
 # please add confirmation message before deletion
 # TODO: implement
+@login_required
 def delete_tire(request):
     context = {}
     return render(request, "delete_tire.html", context)
@@ -195,9 +234,9 @@ def delete_tire(request):
 
 @unauthenticated_user
 def registerView(request):
-    form = UserCreationForm()
+    form = CreateUserForm()
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("login")
@@ -205,6 +244,7 @@ def registerView(request):
     return render(request, "register.html", context)
 
 
+@unauthenticated_user
 def loginView(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -227,6 +267,7 @@ def loginView(request):
 # =======EXTRA FUNCTIONS AND CHECKS=======#
 
 
+@login_required
 def logged_in_check_function(request):
     logged_in_check = False
     if request.user in User.objects.all():

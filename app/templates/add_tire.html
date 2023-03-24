@@ -1,10 +1,27 @@
 {% extends 'home.html' %} {% block content %}
+
+
 <form action="{% url 'add_tire_form' %}" method="POST">
-  {% csrf_token %} {{ form.as_p }}
+  {% csrf_token %}
+  <table>
+  {% for field in form %}
+  <tr>
+  <td>{{field.label}}</td>
+  <td>{{field}}</td>
+  {% if field.label == "Size" %}
 
-  <button type="submit">Submit</button>
+
+  <td>Please enter the size in one of the following formats:<br>NNN-NN-NN<br>NN x NN.NN-NN<br>N.NN x N</td>
+  {% endif %}
+
+  </tr>
+  {% endfor %}
+  </table>
+  <button type="submit">Add Tire</button>
 </form>
-
+{{wrongPattern}}
+{{successMessage}}
+{{errorMessage}}
 {% endblock content %} {% comment %} Needs the form to be fully built out,
 should mention that when giving the size dashes should be used like in real
 sizes. Ex: "255-65-17" {% endcomment %}
