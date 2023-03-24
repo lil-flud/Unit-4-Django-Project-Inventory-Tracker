@@ -1,22 +1,28 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+<!-- prettier ignore-->
+{% block content %}
 
-  <h1>Squids Tires: Employee Registration</h1>
+<h1>Squids Tires: Employee Registration</h1>
 
-  <form method="post" action="">
-    {% csrf_token %}
-    <table>
-        {% for field in form %}
-        <tr>
-            <td>{{field.label}}</td>
-                <td>{{field}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-<input type="submit" name="submit" />
-  </form>
+<form method="post" action="">
+  {% csrf_token %}
+  <table>
+    {% for field in form %}
+    <tr>
+      <td>{{field.label}}</td>
+      <td>{{field}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <input class="btn btn-outline-info" type="submit" name="submit" />
+</form>
 
-  {% for message in messages %}
-  {{message}}
-  {% endfor %}
-  {{form.errors}}
+{% for message in messages %}
+<!-- prettier ignore-->
+{{message}}
+<!-- prettier ignore-->
+{% endfor %}
+<!-- prettier ignore -->
+{{form.errors}}
+<!-- prettier ignore-->
 {% endblock content %}
