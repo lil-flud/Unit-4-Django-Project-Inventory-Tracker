@@ -33,6 +33,12 @@ class Tire(models.Model):
     condition = models.IntegerField(null=True, choices=CONDITIONS)
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
+    invoice = models.ForeignKey(
+        "Invoice", null=True, related_name="tire_set", on_delete=models.CASCADE
+    )
+    outvoice = models.ForeignKey(
+        "Outvoice", null=True, related_name="tire_set", on_delete=models.CASCADE
+    )
 
     # __STR__
     # had to change to strf due to elements being Nonetype and couldn't concatenate
@@ -53,6 +59,34 @@ class Tire(models.Model):
         elif self.condition == 1:
             self.adjusted_price = (self.base_price * 0.50) + self.base_price
         self.save()
+
+
+class Outvoice(models.Model):
+    user = models.CharField(max_length=200)
+    date_ordered = models.DateTimeField(auto_now_add=True, null=True)
+    total_cost = models.FloatField()
+    # tire_set
+
+
+def create_outvoice(user, tires):
+    cost = 0.0
+    for tire in tires:
+        cost = cost = tire.adjust_cost()
+
+
+class Invoice(models.Model):
+    user = models.CharField(max_length=200)
+    indv_cost = models.FloatField()
+    total_cost = models.FloatField()
+    date_sold = models.DateTimeField(auto_now_add=True, null=True)
+    # tire
+
+
+def create_invoice(user, tire, qty):
+    cost = tire.adjust_cost()
+    tot_cost = cost * qty
+    invoice = Invoice(user=user, indv_cost=cost, total_cost=tot_cost)
+    invoice.save()
 
 
 # ===GET TIRE===#

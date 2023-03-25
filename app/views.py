@@ -109,7 +109,6 @@ def add_tire(request):
         else:
             errorMessage = "There was a problem adding a new tire."
             context["errorMessage"] = errorMessage
-            
 
     # test_ob = Tire.objects.get(id=3)
     # test = test_ob.condition + 1
@@ -147,7 +146,22 @@ def view_inventory(request):
 # TODO: on template, add anchors to buy_tires and sell_tires
 def tire_info(request, pk):
     current_tire = Tire.objects.get(id=pk)
-    return render(request, "tire_info.html", {"tire": current_tire})
+    user = request.user
+    context = {"tire": current_tire}
+    if request.method == "POST":
+        tires_sold = request.POST.get("tires_sold")
+        tires_bought = request.POST.get("tires_bought")
+        if tires_bought:
+            tires_bought = int(tires_bought)
+            current_tire.quantity += tires_bought
+            current_tire.save()
+        if tires_sold:
+            tires_sold = int(tires_sold)
+            current_tire.quantity -= tires_sold
+            create_invoice(user, current_tire, tires_sold)
+            current_tire.save()
+        context["testtext"] = tires_bought
+    return render(request, "tire_info.html", context)
     # From Logan: Fixed tire_info so it correctly displays individual tires.
     # Same style of this solution probably possible for directly updating tire quantities like I mentioned on inventory_base.html and tire_info.html.
 
