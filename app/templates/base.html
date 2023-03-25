@@ -1,27 +1,70 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
     {% block title %}
     <title>Tireapalooza LLC.</title>
-    {% endblock %} {% load static %}
-    <link rel="stylesheet" href="{% static 'base.css' %}" />
+    {% endblock %}
   </head>
   <body>
-    {% block navbar%}
-    <nav id="navbar">
-      <a href="{% url 'home' %}">Home Page</a>
-      <a href="{% url 'add_tire_form' %}">Add Tire</a>
-      {% if not user.is_authenticated %}
-      <a href="{% url 'register' %}">Employee Registration</a>
-      {% endif %}
-      <!-- prettier-ignore -->
-      {% endblock %}
-      <!-- prettier-ignore -->
-      {% block content %}
-      {% endblock content %}
-    </nav>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a
+            class="navbar-brand mr-4"
+            href="{% url 'home' %}"
+            style="color: #ababb2"
+            >Tireapalooza LLC.</a
+          >
+          <div class="collapse navbar-collapse">
+            <div class="navbar-nav">
+              {% if request.path != "/" %}
+              <!-- prettier-ignore -->
+              <a class="nav-item nav-link" href="{% url 'home' %}">Home Page</a>
+              {% endif %} {% if user.is_authenticated %}
+              <!-- prettier-ignore -->
+              {% if request.path != "/add_tire/" %}
+              <a class="nav-item nav-link" href="{% url 'add_tire_form' %}"
+                >Add Tire</a
+              >
+              {% endif %}
+              <!-- prettier-ignore -->
+              {% endif %}
+            </div>
+            <div class="navbar-nav">
+              {% if not user.is_authenticated %}
+              <!-- prettier-ignore -->
+              {% if request.path != "/register/" %}
+              <a class="nav-item nav-link" href="{% url 'register' %}"
+                >Employee Registration</a
+              >
+              {% endif %}
+              <!-- prettier-ignore -->
+              {% if request.path != "/login/" %}
+              <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+              {% endif %}
+              <!-- prettier ignore-->
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    {% block content %}
+    <!-- prettier ignore-->
+    {% endblock content %}
   </body>
 </html>

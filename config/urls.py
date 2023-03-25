@@ -20,6 +20,7 @@ from app import views
 urlpatterns = [
     #login.html
     path("login/", views.loginView, name="login"),
+    path("logout/", views.logoutView, name="logout"),
     #register.html
     path("register/", views.registerView, name="register"),
     # view all receipts of outvoices - view_outvoices.html

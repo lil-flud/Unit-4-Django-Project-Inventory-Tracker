@@ -4,14 +4,14 @@
       {% csrf_token %}
       <label>Size:</label>
       <input name="size" type="text" required="False" value="None" />
-      <label>Brands:</label>
+      <label class="ml-2">Brands:</label>
       <select name="brand" id="brand">
         <option value="None">No Filter</option>
         {% for each in brands %}
         <option value="{{ each }}">{{ each }}</option>
         {% endfor %}
       </select>
-      <label>Lines:</label>
+      <label >Lines:</label>
       <select name="line" id="line">
         <option value="None">No Filter</option>
         {% for each in lines %}
@@ -25,7 +25,7 @@
         <option value="{{ each }}">{{ each }}</option>
         {% endfor %}
       </select>
-      <input type="submit" value="Search" />
+      <input class="btn btn-outline-info" type="submit" value="Search" />
     </form>
     <table>
       <tr>
@@ -37,7 +37,7 @@
       {% for tire in tires %}
       <tr>
         <th>
-          <a href="{% url 'tire_info' tire.id %}"> {{ tire.size }} </a>
+          <a  href="{% url 'tire_info' tire.id %}"> {{ tire.size }} </a>
         </th>
         <th>
           <a href="{% url 'tire_info' tire.id %}"> {{ tire.brand }} </a>

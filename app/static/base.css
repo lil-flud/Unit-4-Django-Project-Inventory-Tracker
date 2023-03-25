@@ -1,0 +1,19 @@
+body {
+    background-color: #ababb2;
+    color: #ababb2;
+    margin-top: 7%;
+    margin-left: 7%;
+    background-image: url("https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700325927.jpg")
+}
+
+.bg-steel {
+  background-color: #1a1817;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #ababb2;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #0216f2;
+}

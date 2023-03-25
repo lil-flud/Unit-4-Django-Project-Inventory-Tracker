@@ -8,11 +8,18 @@
   <tr>
   <td>{{field.label}}</td>
   <td>{{field}}</td>
+  {% if field.label == "Size" %}
+
+
+  <td>Please enter the size in one of the following formats:<br>NNN-NN-NN<br>NN x NN.NN-NN<br>N.NN x N</td>
+  {% endif %}
+
   </tr>
   {% endfor %}
   </table>
   <button type="submit">Add Tire</button>
 </form>
+{{wrongPattern}}
 {{successMessage}}
 {{errorMessage}}
 {% endblock content %} {% comment %} Needs the form to be fully built out,
