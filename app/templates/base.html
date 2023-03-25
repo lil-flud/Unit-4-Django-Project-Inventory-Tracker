@@ -20,7 +20,6 @@
     {% endblock %}
   </head>
   <body>
-<<<<<<< HEAD
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
@@ -67,46 +66,5 @@
     {% block content %}
     <!-- prettier ignore-->
     {% endblock content %}
-=======
-      {% block navbar%}
-      <!-- prettier ignore --> 
-      {% if request.path != "/" %}
-      <a href="{% url 'home' %}">Home Page</a>
-      {% endif %}
-      
-      {% if request.path != "/add_tire/" %}
-      {% if user.is_authenticated %}
-      <a href="{% url 'add_tire_form' %}">Add Tire</a>
-      <a href="{% url 'logout' %}">Logout</a>
-      {% endif %}
-      <!-- prettier-ignore -->
-      {% endif %}
-      <!-- prettier-ignore -->
-      {% if not user.is_authenticated %}
-      <a href="{% url 'register' %}">Employee Registration</a>
-      <a href="{% url 'login' %}">Login</a>
-      {% endif %}
-      <!-- prettier-ignore -->
-      {% endblock %}
-      <!-- prettier-ignore -->
-      {% block content %}
-      {% endblock content %}
-    </nav>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
->>>>>>> refs/remotes/origin/main
   </body>
 </html>
