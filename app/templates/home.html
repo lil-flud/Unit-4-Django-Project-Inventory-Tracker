@@ -27,7 +27,7 @@
       </select>
       <input class="btn btn-outline-info" type="submit" value="Search" />
     </form>
-    <table>
+    <table >
       <tr>
         <th>Size</th>
         <th>Brand</th>
@@ -37,16 +37,16 @@
       {% for tire in tires %}
       <tr>
         <th>
-          <a  href="{% url 'tire_info' tire.id %}"> {{ tire.size }} </a>
+          <a href="{% url 'tire_info' tire.id %}"> {{ tire.size }} </a>
         </th>
         <th>
           <a href="{% url 'tire_info' tire.id %}"> {{ tire.brand }} </a>
         </th>
         <th>
-          <a href="{% url 'tire_info' tire.id %}"> {{ tire.line }} </a>
+          <a  href="{% url 'tire_info' tire.id %}"> {{ tire.line }} </a>
         </th>
         <th>
-          <a href="{% url 'tire_info' tire.id %}"> {{ tire.quantity }} </a>
+          <a  href="{% url 'tire_info' tire.id %}"> {{ tire.quantity }} </a>
         </th>
       </tr>
       {% endfor %} {% if tire_list_len_check %}
