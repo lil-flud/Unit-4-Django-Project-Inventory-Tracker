@@ -4,7 +4,7 @@ from app.models import *
 from app import models
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate,logout
 from django.contrib import messages
 from app.forms import *
 from app.models import *
@@ -259,6 +259,11 @@ def loginView(request):
             messages.error(request, "Invalid username or password")
     form = AuthenticationForm()
     return render(request=request, template_name="login.html", context={"form": form})
+
+def logoutView(request):
+    logout(request)
+    messages.info(request, 'You have successfully logged out')
+    return redirect('home')
 
 
 # =======EXTRA FUNCTIONS AND CHECKS=======#
