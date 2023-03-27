@@ -34,12 +34,15 @@
               {% if request.path != "/" %}
               <!-- prettier-ignore -->
               <a class="nav-item nav-link" href="{% url 'home' %}">Home Page</a>
-              {% endif %} {% if user.is_authenticated %}
+              {% endif %}
+              {% if user.is_authenticated %}
+              <li>Your Store: {{request.user.profile.store}}
               <!-- prettier-ignore -->
               {% if request.path != "/add_tire/" %}
               <a class="nav-item nav-link" href="{% url 'add_tire_form' %}"
                 >Add Tire</a
               >
+              <a href="{% url 'logout' %}">Logout</a>
               {% endif %}
               <!-- prettier-ignore -->
               {% endif %}

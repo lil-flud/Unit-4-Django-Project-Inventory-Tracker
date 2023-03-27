@@ -9,7 +9,7 @@ from django import forms
 class TireForm(ModelForm):
     class Meta:
         model = Tire
-        exclude = ["adjusted_price"]
+        exclude = ["adjusted_price", "store"]
 
 
 class CreateUserForm(UserCreationForm):
@@ -18,7 +18,9 @@ class CreateUserForm(UserCreationForm):
         ("Floyd's Tire", "Floyd's Tire"),
         ("Walmart Tire Center", "Walmart Tire Center"),
     ]
-    stores = forms.ChoiceField(choices=STORECHOICES, required=True)
+    store = forms.ChoiceField(choices=STORECHOICES, required=True)
+    city = forms.CharField(max_length=30)
+    state = forms.CharField(max_length=2)
 
     class Meta:
         model = User

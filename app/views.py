@@ -4,7 +4,7 @@ from app.models import *
 from app import models
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate,logout
+from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from app.forms import *
 from app.models import *
@@ -29,8 +29,10 @@ import re
 # should have a view details for each tire
 # authenticated users should have extra links to add tires, view invoices, view outvoices
 # Logan: I've got a lot of the searchability down, still need to do the size search.
+@login_required(login_url="login")
 def home(request):
-    tires_all = Tire.objects.all()
+    profile = Profile.objects.get(user=request.user)
+    tires_all = Tire.objects.filter(store=profile.store)
     # current_user = request.user
     logged_in_check = logged_in_check_function(request)
     size_filter = sorted(list(set(Tire.objects.values_list("size", flat=True))))
@@ -88,8 +90,9 @@ def home(request):
 # IMPORTANT: on form.save(), be sure to adjust the cost as well according to tire condition using tireobject.adjust_cost()
 # render with forms_page.html
 # path name = "add_tire_form"
-@login_required
+@login_required(login_url="login")
 def add_tire(request):
+    profile = Profile.objects.get(user=request.user)
     form = TireForm()
     successMessage = ""
     errorMessage = ""
@@ -114,10 +117,11 @@ def add_tire(request):
                     formtire = models.get_tire(brand, line, size, condition)
                     formtire.adjust_cost()
                     formtire.save()
+                    profile.store.inventory.add(formtire)
                 elif tire:
                     tire.quantity += quantity
                     tire.save()
-                    print(tire)
+                    profile.store.inventory.add(tire)
                 successMessage = "Tire successfully added"
                 context["successMessage"] = successMessage
         else:
@@ -235,7 +239,16 @@ def registerView(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
+            store_name = form.cleaned_data["store"]
+            city = form.cleaned_data["city"]
+            state = form.cleaned_data["state"].upper()
+            store_location = city + ", " + state
             form.save()
+            user = User.objects.all().last()
+            store = getStore(store_name, store_location)
+            if store == None:
+                store = createStore(store_name, store_location)
+            createProfile(user, store)
             return redirect("login")
     context = {"form": form}
     return render(request, "register.html", context)
@@ -260,10 +273,11 @@ def loginView(request):
     form = AuthenticationForm()
     return render(request=request, template_name="login.html", context={"form": form})
 
+
 def logoutView(request):
     logout(request)
-    messages.info(request, 'You have successfully logged out')
-    return redirect('home')
+    messages.info(request, "You have successfully logged out")
+    return redirect("home")
 
 
 # =======EXTRA FUNCTIONS AND CHECKS=======#

@@ -18,10 +18,10 @@ from django.urls import path
 from app import views
 
 urlpatterns = [
-    #login.html
+    # login.html
     path("login/", views.loginView, name="login"),
     path("logout/", views.logoutView, name="logout"),
-    #register.html
+    # register.html
     path("register/", views.registerView, name="register"),
     # view all receipts of outvoices - view_outvoices.html
     path("view_outvoices/", views.view_outvoices, name="view_outvoices"),
