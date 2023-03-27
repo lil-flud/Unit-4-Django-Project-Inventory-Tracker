@@ -44,6 +44,9 @@ class Tire(models.Model):
     store = models.ForeignKey(
         Store, on_delete=models.CASCADE, related_name="inventory", null=True, blank=True
     )
+    order_qty = models.IntegerField(null=True)
+    # invoices
+    # outvoices
 
     # __STR__
     # had to change to strf due to elements being Nonetype and couldn't concatenate
@@ -64,6 +67,66 @@ class Tire(models.Model):
         elif self.condition == 1:
             self.adjusted_price = (self.base_price * 0.50) + self.base_price
         self.save()
+
+
+class Outvoice(models.Model):
+    user = models.CharField(max_length=200)
+
+    total_cost = models.FloatField(null=True)
+    tires = models.ManyToManyField(Tire, related_name="outvoices")
+    date_ordered = models.DateTimeField(auto_now_add=True, null=True)
+
+
+def create_outvoice(user, qty, finished, outvoice, tire=None):
+    if outvoice == None:
+        outvoice = Outvoice(user=user)
+        outvoice.save()
+    if outvoice.user == "placeholder":
+        outvoice.user = user
+        outvoice.save()
+    if not finished:
+        update_outvoice(outvoice, tire, qty)
+    if finished and user != "placeholder":
+        finalize_outvoice(outvoice)
+
+
+def update_outvoice(outvoice, tire, qty):
+    tire.order_qty += qty
+    tire.save()
+    outvoice.tires.add(tire)
+    outvoice.save()
+
+
+def finalize_outvoice(outvoice):
+    tires = outvoice.tires.all()
+    tot_cost = 0.0
+    for tire in tires:
+        tire.quantity += tire.order_qty
+        tot_cost += tire.adjusted_price * tire.order_qty
+        # tire.order_qty = 0
+        tire.save()
+    outvoice.total_cost = tot_cost
+    outvoice.save()
+    newOutvoice = Outvoice(user="placeholder")
+    newOutvoice.save()
+
+
+class Invoice(models.Model):
+    user = models.CharField(max_length=200)
+    quantity = models.IntegerField(null=True)
+    indv_cost = models.FloatField(null=True)
+    total_cost = models.FloatField(null=True)
+    tires = models.ManyToManyField(Tire, related_name="invoices")
+    date_sold = models.DateTimeField(auto_now_add=True, null=True)
+
+
+def create_invoice(user, tire, qty):
+    cost = tire.adjusted_price
+    tot_cost = cost * qty
+    invoice = Invoice(user=user, quantity=qty, indv_cost=cost, total_cost=tot_cost)
+    invoice.save()
+    invoice.tires.add(tire)
+    invoice.save()
 
 
 class Profile(models.Model):

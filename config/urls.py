@@ -38,6 +38,7 @@ urlpatterns = [
     # specific tire details - tire_info.html
     path("tire_info/<pk>/", views.tire_info, name="tire_info"),
     # list of tire inventory and search function in home page - home.html
+    path("cart/", views.show_cart, name="cart"),
     path("", views.home, name="home"),
     path("admin/", admin.site.urls),
 ]
