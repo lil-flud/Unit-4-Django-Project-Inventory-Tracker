@@ -4,7 +4,7 @@ from app.models import *
 from app import models
 from .decorators import unauthenticated_user
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate,logout
+from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from app.forms import *
 from app.models import *
@@ -170,15 +170,22 @@ def view_inventory(request):
 # path name = "tire_info"
 # TODO: on template, add anchors to buy_tires and sell_tires
 def tire_info(request, pk):
+
     current_tire = Tire.objects.get(id=pk)
-    user = request.user
+    user = request.user.username
     context = {"tire": current_tire}
     if request.method == "POST":
         tires_sold = request.POST.get("tires_sold")
         tires_bought = request.POST.get("tires_bought")
         if tires_bought:
             tires_bought = int(tires_bought)
-            current_tire.quantity += tires_bought
+            # current_tire.quantity += tires_bought
+            try:
+                outvoice = Outvoice.objects.latest("id")
+            except:
+                outvoice = None
+            create_outvoice(user, tires_bought, False, outvoice, current_tire)
+
             current_tire.save()
         if tires_sold:
             tires_sold = int(tires_sold)
@@ -189,6 +196,22 @@ def tire_info(request, pk):
     return render(request, "tire_info.html", context)
     # From Logan: Fixed tire_info so it correctly displays individual tires.
     # Same style of this solution probably possible for directly updating tire quantities like I mentioned on inventory_base.html and tire_info.html.
+
+
+def show_cart(request):
+    context = {}
+    try:
+        outvoice = Outvoice.objects.latest("id")
+        tires = outvoice.tires.all()
+        context["outvoice"] = outvoice
+        context["tires"] = tires
+    except:
+        context["message"] = "Cart is empty"
+    else:
+        if request.method == "POST":
+            create_outvoice("placeholder", 0, True, outvoice)
+            return redirect("home")
+    return render(request, "cart.html", context)
 
 
 # ====BUY TIRES====
@@ -218,7 +241,8 @@ def sell_tires(request, pk):
 # TODO: implement
 @login_required
 def view_invoices(request):
-    context = {}
+    invoices = Invoice.objects.all()
+    context = {"invoices": invoices}
     return render(request, "view_invoices.html", context)
 
 
@@ -227,7 +251,9 @@ def view_invoices(request):
 # TODO: implement
 @login_required
 def view_outvoices(request):
-    context = {}
+    outvoices = Outvoice.objects.all()
+
+    context = {"outvoices": outvoices}
     return render(request, "view_outvoices.html", context)
 
 
@@ -275,10 +301,11 @@ def loginView(request):
     form = AuthenticationForm()
     return render(request=request, template_name="login.html", context={"form": form})
 
+
 def logoutView(request):
     logout(request)
-    messages.info(request, 'You have successfully logged out')
-    return redirect('home')
+    messages.info(request, "You have successfully logged out")
+    return redirect("home")
 
 
 # =======EXTRA FUNCTIONS AND CHECKS=======#

@@ -1,0 +1,22 @@
+{% extends 'home.html' %} {% block content %}
+<table>
+  <tr>
+    <td>Employee</td>
+    <td>Tire</td>
+    <td>Quantity</td>
+    <td>Indv Cost</td>
+    <td>Total Cost</td>
+    <td>Date Sold</td>
+  </tr>
+  {%for invoice in invoices%}
+
+  <tr>
+    <td>{{invoice.user}}</td>
+    <td>{{invoice.tires.all.first}}</td>
+    <td>{{invoice.quantity}}</td>
+    <td>cost: {{invoice.indv_cost}}</td>
+    <td>total cost: {{invoice.total_cost}}</td>
+    <td>{{invoice.date_sold}}</td>
+  </tr>
+  {%endfor%} {%endblock content%}
+</table>

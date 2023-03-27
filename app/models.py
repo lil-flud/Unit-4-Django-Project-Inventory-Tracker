@@ -33,12 +33,9 @@ class Tire(models.Model):
     condition = models.IntegerField(null=True, choices=CONDITIONS)
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
-    invoice = models.ForeignKey(
-        "Invoice", null=True, related_name="tire_set", on_delete=models.CASCADE
-    )
-    outvoice = models.ForeignKey(
-        "Outvoice", null=True, related_name="tire_set", on_delete=models.CASCADE
-    )
+    order_qty = models.IntegerField(null=True)
+    # invoices
+    # outvoices
 
     # __STR__
     # had to change to strf due to elements being Nonetype and couldn't concatenate
@@ -63,29 +60,61 @@ class Tire(models.Model):
 
 class Outvoice(models.Model):
     user = models.CharField(max_length=200)
+
+    total_cost = models.FloatField(null=True)
+    tires = models.ManyToManyField(Tire, related_name="outvoices")
     date_ordered = models.DateTimeField(auto_now_add=True, null=True)
-    total_cost = models.FloatField()
-    # tire_set
 
 
-def create_outvoice(user, tires):
-    cost = 0.0
+def create_outvoice(user, qty, finished, outvoice, tire=None):
+    if outvoice == None:
+        outvoice = Outvoice(user=user)
+        outvoice.save()
+    if outvoice.user == "placeholder":
+        outvoice.user = user
+        outvoice.save()
+    if not finished:
+        update_outvoice(outvoice, tire, qty)
+    if finished and user != "placeholder":
+        finalize_outvoice(outvoice)
+
+
+def update_outvoice(outvoice, tire, qty):
+    tire.order_qty += qty
+    tire.save()
+    outvoice.tires.add(tire)
+    outvoice.save()
+
+
+def finalize_outvoice(outvoice):
+    tires = outvoice.tires.all()
+    tot_cost = 0.0
     for tire in tires:
-        cost = cost = tire.adjust_cost()
+        tire.quantity += tire.order_qty
+        tot_cost += tire.adjusted_price * tire.order_qty
+        # tire.order_qty = 0
+        tire.save()
+    outvoice.total_cost = tot_cost
+    outvoice.save()
+    newOutvoice = Outvoice(user="placeholder")
+    newOutvoice.save()
 
 
 class Invoice(models.Model):
     user = models.CharField(max_length=200)
-    indv_cost = models.FloatField()
-    total_cost = models.FloatField()
+    quantity = models.IntegerField(null=True)
+    indv_cost = models.FloatField(null=True)
+    total_cost = models.FloatField(null=True)
+    tires = models.ManyToManyField(Tire, related_name="invoices")
     date_sold = models.DateTimeField(auto_now_add=True, null=True)
-    # tire
 
 
 def create_invoice(user, tire, qty):
-    cost = tire.adjust_cost()
+    cost = tire.adjusted_price
     tot_cost = cost * qty
-    invoice = Invoice(user=user, indv_cost=cost, total_cost=tot_cost)
+    invoice = Invoice(user=user, quantity=qty, indv_cost=cost, total_cost=tot_cost)
+    invoice.save()
+    invoice.tires.add(tire)
     invoice.save()
 
 

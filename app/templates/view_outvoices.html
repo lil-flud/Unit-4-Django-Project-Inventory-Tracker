@@ -1,0 +1,32 @@
+{% extends 'home.html' %} {% block content %}
+<table>
+  <tr>
+    <td>Employee</td>
+    <td>Tire</td>
+    <td>Quantity</td>
+    <td>Indv Cost</td>
+    <td>Total Cost</td>
+    <td>Date Sold</td>
+  </tr>
+  {%for outvoice in outvoices%}
+
+  <tr>
+    <td>{{outvoice.user}}</td>
+    <td>
+      {%for tire in outvoice.tires.all%} {{tire}} <br />
+      {%endfor%}
+    </td>
+    <td>
+      {%for tire in outvoice.tires.all%} {{tire.order_qty}} <br />
+      {%endfor%}
+    </td>
+    <td>
+      {%for tire in outvoice.tires.all%} {{tire.adjusted_price}} <br />
+      {%endfor%}
+    </td>
+
+    <td>total cost: {{outvoice.total_cost}}</td>
+    <td>{{outvoice.date_sold}}</td>
+  </tr>
+  {%endfor%} {%endblock content%}
+</table>
