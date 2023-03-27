@@ -11,6 +11,11 @@ from django.contrib.auth.models import User
 #         return self.name
 
 
+class Store(models.Model):
+    store_name = models.CharField(max_length=100)
+    location = models.CharField(max_length=200)
+
+
 class Tire(models.Model):
     PATTERNS = (
         ("Street Tread", "Street Tread"),
@@ -33,6 +38,7 @@ class Tire(models.Model):
     condition = models.IntegerField(null=True, choices=CONDITIONS)
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="inventory")
 
     # __STR__
     # had to change to strf due to elements being Nonetype and couldn't concatenate
@@ -53,6 +59,13 @@ class Tire(models.Model):
         elif self.condition == 1:
             self.adjusted_price = (self.base_price * 0.50) + self.base_price
         self.save()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    store = models.OneToOneField(
+        Store, on_delete=models.CASCADE, related_name="staff_members"
+    )
 
 
 # ===GET TIRE===#
