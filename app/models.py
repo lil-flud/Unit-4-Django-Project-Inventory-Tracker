@@ -38,7 +38,7 @@ class Tire(models.Model):
     condition = models.IntegerField(null=True, choices=CONDITIONS)
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="inventory")
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="inventory", null=True, blank=True)
 
     # __STR__
     # had to change to strf due to elements being Nonetype and couldn't concatenate
