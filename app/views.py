@@ -24,7 +24,6 @@ import re
 # ===HOME VIEW===#
 # Landing page
 # View list of all tires and utilizes search bar function
-# TODO: create a non-view view_inventory_fun()?
 # authenticated users have permission to edit the tire, buy or sell
 # should have a view details for each tire
 # authenticated users should have extra links to add tires, view invoices, view outvoices
@@ -145,34 +144,12 @@ def correct_pattern(string):
     )
 
 
-# ===VIEW INVENTORY FUN===
-# User can view inventory of their current stock
-# Visible fields should be: Brand, Line, Size, Condition, Price, Quantity
-# User should be able to select a tire to update the quantity (they cannot update anything else)
-# User should be able to filter inventory using a search function
-# TODO
-# create a search bar that allows user to search by brand, line, size, condition
-# this search bar should allow optional searches (ex. user can search by size only, if they like)
-# the search bar should refresh the page with the new results
-# TODO
-# create a means of the user selecting a tire to view details, buy, or sell
-# suggestion: on click, go to different view with tire as an argument - tireDetails
-def view_inventory(request):
-    tires = Tire.objects.all()
-    for tire in tires:
-        print(tire)
-    context = {
-        "tires": tires,
-    }
-    return render(request, "inventory_base.html", context)
-
-
 # ===TIRE INFO VIEW===#
 # user will view specific selected tire
 # this page will allow the user to buy more tires or sell more tires -> send to different view
 # render with tire_info.html
 # path name = "tire_info"
-# TODO: on template, add anchors to buy_tires and sell_tires
+# TODO: button to delete tires
 def tire_info(request, pk):
     current_tire = Tire.objects.get(id=pk)
     return render(request, "tire_info.html", {"tire": current_tire})
