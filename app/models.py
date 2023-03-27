@@ -11,6 +11,14 @@ from django.contrib.auth.models import User
 #         return self.name
 
 
+class Store(models.Model):
+    store_name = models.CharField(max_length=100)
+    location = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.store_name + ", " + self.location
+
+
 class Tire(models.Model):
     PATTERNS = (
         ("Street Tread", "Street Tread"),
@@ -33,6 +41,9 @@ class Tire(models.Model):
     condition = models.IntegerField(null=True, choices=CONDITIONS)
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
     quantity = models.IntegerField()
+    store = models.ForeignKey(
+        Store, on_delete=models.CASCADE, related_name="inventory", null=True, blank=True
+    )
     order_qty = models.IntegerField(null=True)
     # invoices
     # outvoices
@@ -118,6 +129,16 @@ def create_invoice(user, tire, qty):
     invoice.save()
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    store = models.ForeignKey(
+        Store, on_delete=models.CASCADE, related_name="staff_members"
+    )
+
+    def __str__(self):
+        return self.user.username + ", " + self.store.store_name
+
+
 # ===GET TIRE===#
 # retrieve tire by brand, line, size, condition
 # if any error occurs, return none
@@ -139,3 +160,23 @@ def update_quantity(brand, line, size, condition, quantity):
     tire = get_tire(brand, line, size, condition)
     tire.quantity = quantity
     return tire
+
+
+# =======STORES========#
+def createStore(store_name, location):
+    store = Store(store_name=store_name, location=location)
+    store.save()
+    return store
+
+
+def createProfile(user, store):
+    profile = Profile(user=user, store=store)
+    profile.save()
+
+
+def getStore(store_name, location):
+    try:
+        store = Store.objects.all().get(store_name=store_name, location=location)
+        return store
+    except:
+        return None

@@ -3,7 +3,7 @@ body {
     color: #ababb2;
     margin-top: 7%;
     margin-left: 7%;
-    background-image: url("https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700325927.jpg")
+    background-image: url("image/unitproject.jpeg")
 }
 
 .bg-steel {
@@ -16,4 +16,9 @@ body {
 
 .site-header .navbar-nav .nav-link:hover {
   color: #0216f2;
+}
+
+tr, th, table {
+  padding-left: 10px;
+  padding-right: 10px;
 }

@@ -6,4 +6,6 @@ from app.models import *
 admin.site.register(Tire)
 admin.site.register(Invoice)
 admin.site.register(Outvoice)
+admin.site.register(Store)
+admin.site.register(Profile)
 # admin.site.register(Tag)
