@@ -208,3 +208,15 @@ def getStore(store_name, location):
         return store
     except:
         return None
+
+
+def delete_tire(tire):
+    tire.delete()
+
+
+def get_tire(pk):
+    try:
+        tire = Tire.objects.get(id=pk)
+        return tire
+    except:
+        return None

@@ -2,6 +2,8 @@
 <nav>
   <h2><a href="{% url 'home' %}">Back To Home Page!</a></h2>
 </nav>
+
+{% if tire is not None %}
 <h3>Brand: {{ tire.brand }}</h3>
 <h3>Line: {{ tire.line }}</h3>
 <h3>Size: {{tire.size}}</h3>
@@ -21,9 +23,13 @@
   <input type="submit" value="Sell Tires" />
 </form>
 
-{{testtext}}
 
+<a class="btn" href=" {% url 'delete_tire' tire.id%}">Delete This Tire</a>
 <a href="{% url 'view_invoices' %}">view invoices</a>
+{% endif %}
+
+{{doesNotExist}}
+
 {% endblock content %} {% comment %} Logan: Basic display of an individual
 tire's info. {% endcomment %} {% comment %} Logan: Potentially add an update
 button so user can adjust quantities directly without having to fill out form.

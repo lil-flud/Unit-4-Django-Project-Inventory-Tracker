@@ -15,7 +15,10 @@
 
 
     <td>
-      {%for tire in outvoice.tires.all%} {{tire}} <br>
+      {%for tire in outvoice.tires.all%}
+      {% if tire is not None%}
+      {{tire}} <br>
+      {%endif%}
       {%endfor%}
     </td>
     <td>
