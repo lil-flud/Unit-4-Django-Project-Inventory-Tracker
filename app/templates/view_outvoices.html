@@ -1,5 +1,5 @@
 {% extends 'home.html' %} {% block content %}
-<table border=1 frame=void rules=columns>
+<table border="1" frame="1" rules="columns">
   <tr>
     <th>Employee</th>
     <th>Tire</th>
@@ -13,27 +13,22 @@
     {% if outvoice.is_finalized and outvoice.tires is not None %}
     <td>{{outvoice.user}}</td>
 
-
     <td>
-      {%for tire in outvoice.tires.all%}
-      {% if tire is not None%}
-      {{tire}} <br>
-      {%endif%}
+      {%for tire in outvoice.tires.all%} {% if tire is not None%} {{tire}}
+      <br />
+      {%endif%} {%endfor%}
+    </td>
+    <td>
+      {%for order in outvoice.order_quantity.all%} {{order.num_of_tires}}<br />
       {%endfor%}
     </td>
     <td>
-      {%for order in outvoice.order_quantity.all%}
-      {{order.num_of_tires}}<br>
-      {%endfor%}
-    </td>
-    <td>
-      {%for tire in outvoice.tires.all%} {{tire.base_price}} <br>
+      {%for tire in outvoice.tires.all%} {{tire.base_price}} <br />
       {%endfor%}
     </td>
 
     <td>{{outvoice.total_cost}}</td>
     <td>{{outvoice.date_ordered}}</td>
   </tr>
-  {% endif %}
-  {%endfor%} {%endblock content%}
+  {% endif %} {%endfor%} {%endblock content%}
 </table>

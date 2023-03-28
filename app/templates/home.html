@@ -1,33 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action="{% url 'home' %}" method="POST">
-  {% csrf_token %}
-  <label>Size:</label>
-  <input name="size" type="text" required="False" value="None" />
-  <label class="ml-2">Brands:</label>
-  <select name="brand" id="brand">
-    <option value="None">No Filter</option>
-    {% for each in brands %}
-    <option value="{{ each }}">{{ each }}</option>
-    {% endfor %}
-  </select>
-  <label>Lines:</label>
-  <select name="line" id="line">
-    <option value="None">No Filter</option>
-    {% for each in lines %}
-    <option value="{{ each }}">{{ each }}</option>
-    {% endfor %}
-  </select>
-  <label>Tread Patterns:</label>
-  <select name="tread_pattern" id="tread_pattern">
-    <option value="None">No Filter</option>
-    {% for each in tread_patterns %}
-    <option value="{{ each }}">{{ each }}</option>
-    {% endfor %}
-  </select>
-  <input class="btn btn-outline-info" type="submit" value="Search" />
-</form>
-<table>
+<div id="search_page_container">
+  <div id="search_filters">
+    <form id="search_form" action="{% url 'home' %}" method="POST">
+      {% csrf_token %}
+      <span>
+      <label>Size:</label>
+      <input name="size" type="text" required="False" value="None" /></span>
+      <span><label class="ml-2">Brands:</label>
+      <select name="brand" id="brand">
+        <option value="None">No Filter</option>
+        {% for each in brands %}
+        <option value="{{ each }}">{{ each }}</option>
+        {% endfor %}
+      </select></span>
+      <span><label>Lines:</label>
+      <select name="line" id="line">
+        <option value="None">No Filter</option>
+        {% for each in lines %}
+        <option value="{{ each }}">{{ each }}</option>
+        {% endfor %}
+      </select></span>
+      <span><label>Tread Patterns:</label>
+      <select name="tread_pattern" id="tread_pattern">
+        <option value="None">No Filter</option>
+        {% for each in tread_patterns %}
+        <option value="{{ each }}">{{ each }}</option>
+        {% endfor %}
+      </select></span>
+      <input class="btn btn-outline-info" type="submit" value="Search" />
+    </form>
+  </div>
+<table border=1 frame=1 rules=columns>
   <tr>
     <th>Size</th>
     <th>Brand</th>
@@ -64,7 +68,7 @@
 </table>
 {% endblock content %}
 </body>
-
+</div>
 </html>
 {% comment %}
 <li>

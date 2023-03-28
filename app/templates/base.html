@@ -79,10 +79,12 @@
         </div>
       </nav>
     </header>
-    <div>
-      {% block content %}
-      <!-- prettier ignore-->
-      {% endblock content %}
+    <div id="test_div">
+      <div id="block_container">
+        {% block content %}
+        <!-- prettier ignore-->
+        {% endblock content %}
+      </div>
     </div>
   </body>
 </html>

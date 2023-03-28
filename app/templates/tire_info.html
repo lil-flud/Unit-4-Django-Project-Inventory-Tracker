@@ -19,18 +19,18 @@
 </form>
 <form action="" method="POST">
   {% csrf_token %}
-  <input name="tires_sold" type="number" max="{{tire.quantity}}" value="Quantity" />
+  <input
+    name="tires_sold"
+    type="number"
+    max="{{tire.quantity}}"
+    value="Quantity"
+  />
   <input type="submit" value="Sell Tires" />
 </form>
 
-
 <a class="btn" href=" {% url 'delete_tire' tire.id%}">Delete This Tire</a>
-<a href="{% url 'view_invoices' %}">view invoices</a>
-{% endif %}
-
-{{doesNotExist}}
-
-{% endblock content %} {% comment %} Logan: Basic display of an individual
-tire's info. {% endcomment %} {% comment %} Logan: Potentially add an update
-button so user can adjust quantities directly without having to fill out form.
-{% endcomment %}
+<a href="{% url 'view_invoices' %}">View Invoices</a>
+{% endif %} {{doesNotExist}} {% endblock content %} {% comment %} Logan: Basic
+display of an individual tire's info. {% endcomment %} {% comment %} Logan:
+Potentially add an update button so user can adjust quantities directly without
+having to fill out form. {% endcomment %}

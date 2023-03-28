@@ -21,4 +21,44 @@ body {
 tr, th, table {
   padding-left: 10px;
   padding-right: 10px;
+  font-size: 1.1em;
+}
+
+#block_container{
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#search_page_container{
+  display: flex;
+  flex-direction: column;
+}
+#search_filters{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  outline: 1px gray solid;
+}
+/* #test_div{
+  width: 800px;
+} */
+
+/* #search_form label, #search_form input{
+  padding-left: 10px;
+  padding-right: 10px;
+} */
+#search_form{
+  width: 80%;
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 10px;
+}
+#search_form label, #search_form input, #search_form select{
+  height: 34px;
+}
+#search_form label{
+  font-size: 1.2em;
 }
