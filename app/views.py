@@ -214,12 +214,15 @@ def tire_info(request, pk):
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
 def show_cart(request):
+
     context = {}
     try:
         outvoice = Outvoice.objects.latest("id")
+        tot_cost = calculate_total_cost(outvoice)
         tires = outvoice.tires.all()
         context["outvoice"] = outvoice
         context["tires"] = tires
+        context["tot_cost"] = tot_cost
         if not tires:
             context["message"] = "Cart is Empty"
 

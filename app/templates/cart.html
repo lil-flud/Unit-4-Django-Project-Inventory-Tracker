@@ -19,6 +19,15 @@
     <td>{{tire.base_price}}</td>
   </tr>
   {%endfor%}
+  <tr>
+    <td> </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>total: {{tot_cost}}</td>
+
+  </tr>
 </table>
 {% if message %}
 {{message}} <p> Why not <a href=" {% url 'home' %}">browse tires</a> or <a href=" {% url 'add_tire_form' %}">add a new
