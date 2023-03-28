@@ -112,6 +112,10 @@ def add_tire(request):
                 quantity = form.cleaned_data["order_qty"]
                 condition = form.cleaned_data["condition"]
                 tire = models.get_tire(brand, line, size, condition)
+                try:
+                    outvoice = Outvoice.objects.latest("id")
+                except:
+                    outvoice = None
                 if tire == None:
                     form.save()
                     formtire = models.get_tire(brand, line, size, condition)
@@ -119,15 +123,18 @@ def add_tire(request):
                     formtire.save()
                     # profile.store.inventory.add(formtire)
                     create_outvoice(
-                        request.user.username, formtire.quantity, False, None, formtire
+                        request.user.username,
+                        formtire.quantity,
+                        False,
+                        outvoice,
+                        formtire,
                     )
                 elif tire != None:
-                    tire.quantity += quantity
                     tire.save()
                     print(tire)
                     profile.store.inventory.add(tire)
                     create_outvoice(
-                        request.user.username, tire.quantity, False, None, tire
+                        request.user.username, tire.quantity, False, outvoice, tire
                     )
                 successMessage = "Tire successfully added"
                 context["successMessage"] = successMessage

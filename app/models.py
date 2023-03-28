@@ -71,10 +71,22 @@ class Tire(models.Model):
 
 class Outvoice(models.Model):
     user = models.CharField(max_length=200)
-
     total_cost = models.FloatField(null=True)
     tires = models.ManyToManyField(Tire, related_name="outvoices")
     date_ordered = models.DateTimeField(auto_now_add=True, null=True)
+    # order_quantity
+
+
+class OrderQuantity(models.Model):
+    tire = models.ForeignKey(Tire, on_delete=models.PROTECT, null=True, blank=True)
+    num_of_tires = models.IntegerField(null=True)
+    outvoice = models.ForeignKey(
+        Outvoice,
+        related_name="order_quantity",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
 
 def create_outvoice(user, qty, finished, outvoice, tire=None):
@@ -108,7 +120,14 @@ def finalize_outvoice(outvoice):
         tire.quantity += tire.order_qty
         tot_cost += tire.base_price * tire.order_qty
         print("look here")
-        # tire.order_qty = 0
+        order = OrderQuantity(tire=tire, num_of_tires=tire.order_qty)
+        order.save()
+        outvoice.order_quantity.add(order)
+        # outvoice.order_quantity.tire = tire
+        # outvoice.order_quantity.num_of_tires = tire.order_qty
+        print
+        outvoice.save()
+        tire.order_qty = 0
         tire.save()
     outvoice.total_cost = tot_cost
     outvoice.save()
