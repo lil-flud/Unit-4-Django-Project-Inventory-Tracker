@@ -30,7 +30,8 @@
               <!-- prettier-ignore -->
               {% if request.path != "/add_tire/" %}
               <a class="nav-item nav-link" href="{% url 'add_tire_form' %}">Add Tire</a>
-              <a href="{% url 'logout' %}">Logout</a>
+
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% endif %}
               {% if request.path != "/view_outvoices/" %}
               <a href=" {% url 'view_outvoices' %}">Outvoices</a>
@@ -40,7 +41,9 @@
               {% endif %}
               <!-- prettier-ignore -->
               {% endif %}
+              <li class="nav-item nav-link">{{request.user.profile.store}}</li>
           </div>
+
           <div class="navbar-nav">
             {% if not user.is_authenticated %}
             <!-- prettier-ignore -->

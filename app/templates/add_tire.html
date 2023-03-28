@@ -1,6 +1,5 @@
 {% extends 'home.html' %} {% block content %}
 
-
 <form action="{% url 'add_tire_form' %}" method="POST">
   {% csrf_token %}
   <table>
@@ -9,21 +8,17 @@
       <td>{{field.label}}</td>
       <td>{{field}}</td>
       {% if field.label == "Size" %}
-
-
-      <td>Please enter the size in one of the following formats:<br>NNN-NN-NN<br>NN x NN.NN-NN<br>N.NN x N</td>
+      <td style="padding-left: 16px">
+        Please enter the size in this format:<br />NNN-NN-NN<br />
+      </td>
       {% endif %}
-
     </tr>
     {% endfor %}
   </table>
-  <button type="submit">Add Tire</button>
+  <button class="btn btn-outline-info" type="submit">Add Tire</button>
 </form>
 {{wrongPattern}}
-{% if successMessage %}
-{{successMessage}} <p> You put this tire in your cart. <a href=" {% url 'cart' %}">view cart</a> to finalize order.</p>
-{% endif %}
-
+{{successMessage}}
 {{errorMessage}}
 {% endblock content %} {% comment %} Needs the form to be fully built out,
 should mention that when giving the size dashes should be used like in real
