@@ -5,7 +5,9 @@
 <h3>Brand: {{ tire.brand }}</h3>
 <h3>Line: {{ tire.line }}</h3>
 <h3>Size: {{tire.size}}</h3>
+<h3>Condition: {{tire.get_condition_display}}</h3>
 <h3>Sell-price: {{ tire.adjusted_price }}</h3>
+<h3>Base-price: {{ tire.base_price }}</h3>
 <h3>Quantity in stock: {{ tire.quantity }}</h3>
 
 <form action="" method="POST">
@@ -15,12 +17,7 @@
 </form>
 <form action="" method="POST">
   {% csrf_token %}
-  <input
-    name="tires_sold"
-    type="number"
-    max="{{tire.quantity}}"
-    value="Quantity"
-  />
+  <input name="tires_sold" type="number" max="{{tire.quantity}}" value="Quantity" />
   <input type="submit" value="Sell Tires" />
 </form>
 

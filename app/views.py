@@ -9,16 +9,15 @@ from django.contrib import messages
 from app.forms import *
 from app.models import *
 from app import models
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 import re
+from dataclasses import dataclass
+from typing import List
 
 # Create your views here.
-
-# TODO
-# BE SURE TO ADD BACK BUTTON ON ALL HTML PAGES
-# IT CAN GO BACK TO HOME, OR WHEREVER
 
 
 # ===HOME VIEW===#
@@ -29,6 +28,7 @@ import re
 # authenticated users should have extra links to add tires, view invoices, view outvoices
 # Logan: I've got a lot of the searchability down, still need to do the size search.
 @login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def home(request):
     profile = Profile.objects.get(user=request.user)
     tires_all = Tire.objects.filter(store=profile.store)
@@ -90,6 +90,7 @@ def home(request):
 # render with forms_page.html
 # path name = "add_tire_form"
 @login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def add_tire(request):
     profile = Profile.objects.get(user=request.user)
     form = TireForm()
@@ -108,7 +109,7 @@ def add_tire(request):
             if not correct_pattern(size):
                 pass
             else:
-                quantity = form.cleaned_data["quantity"]
+                quantity = form.cleaned_data["order_qty"]
                 condition = form.cleaned_data["condition"]
                 tire = models.get_tire(brand, line, size, condition)
                 if tire == None:
@@ -116,13 +117,21 @@ def add_tire(request):
                     formtire = models.get_tire(brand, line, size, condition)
                     formtire.adjust_cost()
                     formtire.save()
-                    profile.store.inventory.add(formtire)
-                elif tire:
+                    # profile.store.inventory.add(formtire)
+                    create_outvoice(
+                        request.user.username, formtire.quantity, False, None, formtire
+                    )
+                elif tire != None:
                     tire.quantity += quantity
                     tire.save()
+                    print(tire)
                     profile.store.inventory.add(tire)
+                    create_outvoice(
+                        request.user.username, tire.quantity, False, None, tire
+                    )
                 successMessage = "Tire successfully added"
                 context["successMessage"] = successMessage
+
         else:
             errorMessage = "There was a problem adding a new tire."
             context["errorMessage"] = errorMessage
@@ -150,6 +159,8 @@ def correct_pattern(string):
 # render with tire_info.html
 # path name = "tire_info"
 # TODO: button to delete tires
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def tire_info(request, pk):
 
     current_tire = Tire.objects.get(id=pk)
@@ -179,15 +190,21 @@ def tire_info(request, pk):
     # Same style of this solution probably possible for directly updating tire quantities like I mentioned on inventory_base.html and tire_info.html.
 
 
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def show_cart(request):
     context = {}
     try:
         outvoice = Outvoice.objects.latest("id")
         tires = outvoice.tires.all()
+        print(tires)
         context["outvoice"] = outvoice
         context["tires"] = tires
+        if not tires:
+            context["message"] = "Cart is Empty"
+
     except:
-        context["message"] = "Cart is empty"
+        pass
     else:
         if request.method == "POST":
             create_outvoice("placeholder", 0, True, outvoice)
@@ -200,7 +217,8 @@ def show_cart(request):
 # quantity can not be negative
 # create_outvoice() on form submit
 # TODO: implement
-@login_required
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def buy_tires(request, pk):
     context = {}
     return render(request, "buy_tires.html", context)
@@ -211,7 +229,8 @@ def buy_tires(request, pk):
 # quantity can not be more than the amount of tires in inventory
 # create_invoice() on form submit
 # TODO: implement
-@login_required
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def sell_tires(request, pk):
     context = {}
     return render(request, "sell_tires.html", context)
@@ -220,7 +239,8 @@ def sell_tires(request, pk):
 # ===VIEW INVOICES====
 # user should be able to view all details of items of the Invoice model
 # TODO: implement
-@login_required
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def view_invoices(request):
     invoices = Invoice.objects.all()
     context = {"invoices": invoices}
@@ -230,7 +250,8 @@ def view_invoices(request):
 # ==VIEW OUTVOICES====
 # user should be able to view all details of items of the Outvoice model
 # TODO: implement
-@login_required
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def view_outvoices(request):
     outvoices = Outvoice.objects.all()
 
@@ -242,7 +263,8 @@ def view_outvoices(request):
 # user will be able to delete tire
 # please add confirmation message before deletion
 # TODO: implement
-@login_required
+@login_required(login_url="login")
+@allowed_users(allowed_roles="staff")
 def delete_tire(request):
     context = {}
     return render(request, "delete_tire.html", context)
@@ -267,6 +289,8 @@ def registerView(request):
             if store == None:
                 store = createStore(store_name, store_location)
             createProfile(user, store)
+            group = Group.objects.get(name="staff")
+            user.groups.add(group)
             return redirect("login")
     context = {"form": form}
     return render(request, "register.html", context)
@@ -295,7 +319,7 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     messages.info(request, "You have successfully logged out")
-    return redirect("home")
+    return redirect("login")
 
 
 # =======EXTRA FUNCTIONS AND CHECKS=======#

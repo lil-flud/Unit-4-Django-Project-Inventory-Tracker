@@ -26,10 +26,10 @@ class Tire(models.Model):
         ("Mud Terrain", "Mud-Terrain"),
     )
     CONDITIONS = (
-        (1, 1),
-        (2, 2),
-        (3, 3),
-        (4, 4),
+        (1, "Heavily Used"),
+        (2, "Used"),
+        (3, "Good"),
+        (4, "New"),
     )
 
     brand = models.CharField(max_length=200, null=True)
@@ -40,7 +40,7 @@ class Tire(models.Model):
     tread_pattern = models.CharField(max_length=200, null=True, choices=PATTERNS)
     condition = models.IntegerField(null=True, choices=CONDITIONS)
     adjusted_price = models.FloatField(null=True, blank=True, default=None)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=0)
     store = models.ForeignKey(
         Store, on_delete=models.CASCADE, related_name="inventory", null=True, blank=True
     )
@@ -52,7 +52,7 @@ class Tire(models.Model):
     # had to change to strf due to elements being Nonetype and couldn't concatenate
 
     def __str__(self):
-        return f"{self.size} | {self.brand} | {self.line} | {self.adjusted_price} | {self.quantity}"
+        return f"{self.size} | {self.brand} | {self.line}"
 
     # ADJUST COST
     # adjust the cost for the tire according to condition
@@ -86,7 +86,8 @@ def create_outvoice(user, qty, finished, outvoice, tire=None):
         outvoice.save()
     if not finished:
         update_outvoice(outvoice, tire, qty)
-    if finished and user != "placeholder":
+    if finished and outvoice.user != "placeholder":
+        print("look here")
         finalize_outvoice(outvoice)
 
 
@@ -100,9 +101,13 @@ def update_outvoice(outvoice, tire, qty):
 def finalize_outvoice(outvoice):
     tires = outvoice.tires.all()
     tot_cost = 0.0
+    user = User.objects.get(username=outvoice.user)
     for tire in tires:
+        if tire not in user.profile.store.inventory.all():
+            user.profile.store.inventory.add(tire)
         tire.quantity += tire.order_qty
-        tot_cost += tire.adjusted_price * tire.order_qty
+        tot_cost += tire.base_price * tire.order_qty
+        print("look here")
         # tire.order_qty = 0
         tire.save()
     outvoice.total_cost = tot_cost

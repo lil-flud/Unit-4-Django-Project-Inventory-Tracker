@@ -9,7 +9,7 @@ from django import forms
 class TireForm(ModelForm):
     class Meta:
         model = Tire
-        exclude = ["adjusted_price", "store"]
+        exclude = ["adjusted_price", "store", "quantity"]
 
 
 class CreateUserForm(UserCreationForm):

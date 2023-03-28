@@ -4,8 +4,14 @@
 {%for tire in tires%} {{tire.brand}} {{tire.order_qty}} {{tire.adjusted_price}}
 <br />
 {%endfor%}
+{% if message %}
+{{message}} <p> Why not <a href=" {% url 'home' %}">browse tires</a> or <a href=" {% url 'add_tire_form' %}">add a new
+    tire</a> to document your purchases?</p>
+{% endif %}
+{% if not message %}
 <form action="" method="POST">
-  {%csrf_token%}
+  {%csrf_token%}s
   <input type="submit" />
-  {%endblock content%}
 </form>
+{% endif %}
+{%endblock content%}
