@@ -34,11 +34,17 @@ def home(request):
     tires_all = Tire.objects.filter(store=profile.store)
     # current_user = request.user
     logged_in_check = logged_in_check_function(request)
-    size_filter = sorted(list(set(Tire.objects.values_list("size", flat=True))))
-    brand_filter = sorted(list(set(Tire.objects.values_list("brand", flat=True))))
-    line_filter = sorted(list(set(Tire.objects.values_list("line", flat=True))))
+    size_filter = sorted(
+        list(set(profile.store.inventory.values_list("size", flat=True)))
+    )
+    brand_filter = sorted(
+        list(set(profile.store.inventory.values_list("brand", flat=True)))
+    )
+    line_filter = sorted(
+        list(set(profile.store.inventory.values_list("line", flat=True)))
+    )
     tread_pattern_filter = sorted(
-        list(set(Tire.objects.values_list("tread_pattern", flat=True)))
+        list(set(profile.store.inventory.values_list("tread_pattern", flat=True)))
     )
     tire_list = []
     tire_list_len_check = False
@@ -58,7 +64,7 @@ def home(request):
             q.update({"line": searched_line})
         if searched_tread_pattern != "None":
             q.update({"tread_pattern": searched_tread_pattern})
-        filtered_tire_list = Tire.objects.filter(**q)
+        filtered_tire_list = profile.store.inventory.filter(**q)
 
         if len(q) == 0 and len(filtered_tire_list) == 0 or len(filtered_tire_list) == 0:
             tire_list_len_check = True

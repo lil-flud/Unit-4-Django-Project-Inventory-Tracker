@@ -18,7 +18,9 @@
   <button class="btn btn-outline-info" type="submit">Add Tire</button>
 </form>
 {{wrongPattern}}
-{{successMessage}}
+{% if successMessage %}
+{{successMessage}} You can finalize your order by viewing the <a href=" {% url 'cart' %}">cart.</a>
+{% endif %}
 {{errorMessage}}
 {% endblock content %} {% comment %} Needs the form to be fully built out,
 should mention that when giving the size dashes should be used like in real
