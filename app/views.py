@@ -262,7 +262,7 @@ def sell_tires(request, pk):
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
 def view_invoices(request):
-    invoices = Invoice.objects.all()
+    invoices = Invoice.objects.filter(user=request.user.username)
     context = {"invoices": invoices}
     return render(request, "view_invoices.html", context)
 
