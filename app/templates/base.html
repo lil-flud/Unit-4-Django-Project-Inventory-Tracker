@@ -40,6 +40,8 @@
               <a class="nav-item nav-link" href="{% url 'add_tire_form' %}"
                 >Add Tire</a
               >
+              {% endif %} {% if request.path != "/logout/" %}
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% endif %}
               <!-- prettier-ignore -->
               {% endif %}
