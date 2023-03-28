@@ -15,19 +15,26 @@
 
 
     <td>
+
       {%for tire in outvoice.tires.all%}
-      {% if tire is not None%}
       {{tire}} <br>
-      {%endif%}
+      {%empty%}
+      Tire removed from Database
       {%endfor%}
+
+
     </td>
     <td>
       {%for order in outvoice.order_quantity.all%}
       {{order.num_of_tires}}<br>
+      {%empty%}
+      N/A
       {%endfor%}
     </td>
     <td>
       {%for tire in outvoice.tires.all%} {{tire.base_price}} <br>
+      {%empty%}
+      N/A
       {%endfor%}
     </td>
 
@@ -35,5 +42,6 @@
     <td>{{outvoice.date_ordered}}</td>
   </tr>
   {% endif %}
-  {%endfor%} {%endblock content%}
+  {%endfor%}
+  {%endblock content%}
 </table>
