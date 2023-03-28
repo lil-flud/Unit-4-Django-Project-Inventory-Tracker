@@ -21,26 +21,26 @@
         <a class="navbar-brand mr-4" href="{% url 'home' %}" style="color: #ababb2">Tireapalooza LLC.</a>
         <div class="collapse navbar-collapse">
           <div class="navbar-nav">
-            {% if request.path != "/" %}
-            <!-- prettier-ignore -->
-            <a class="nav-item nav-link" href="{% url 'home' %}">Home Page</a>
-            {% endif %}
             {% if user.is_authenticated %}
-            <li>Your Store: {{request.user.profile.store}}</li>
-              <!-- prettier-ignore -->
-              {% if request.path != "/add_tire/" %}
-              <a class="nav-item nav-link" href="{% url 'add_tire_form' %}">Add Tire</a>
-
-              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-              {% endif %}
-              {% if request.path != "/view_outvoices/" %}
-              <a href=" {% url 'view_outvoices' %}">Outvoices</a>
-              {% endif %}
-              {% if request.path != "/cart/" %}
-              <a href=" {% url 'cart' %}">Cart</a>
-              {% endif %}
-              <!-- prettier-ignore -->
-              {% endif %}
+            <li class='nav-item nav-link'>Your Store: {{request.user.profile.store}}</li>
+            <!-- prettier-ignore -->
+            {% if request.path != "/add_tire/" %}
+            <a class="nav-item nav-link" href="{% url 'add_tire_form' %}">Add Tire</a>
+            {% endif %}
+            {% if request.path != "/view_outvoices/" %}
+            <a class="nav-item nav-link" href=" {% url 'view_outvoices' %}">Outvoices</a>
+            {% endif %}
+            {% if request.path != "/cart/" %}
+            <a class="nav-item nav-link" href=" {% url 'cart' %}">Cart</a>
+            {% endif %}
+            {% if request.path != "/logout/" %}
+            <a class="nav-item nav-link" href=" {% url 'logout' %}">Logout</a>
+            {% endif %}
+            {% if request.path != "/" %}
+            <a class="nav-item nav-link" href=" {% url 'home' %}">Home</a>
+            {% endif %}
+            <!-- prettier-ignore -->
+            {% endif %}
           </div>
 
           <div class="navbar-nav">
