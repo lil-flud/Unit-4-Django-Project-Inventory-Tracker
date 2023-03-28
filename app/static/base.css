@@ -2,7 +2,6 @@ body {
     background-color: #ababb2;
     color: #ababb2;
     margin-top: 7%;
-    margin-left: 7%;
     background-image: url("image/unitproject.jpeg")
 }
 
@@ -11,7 +10,10 @@ body {
 }
 
 .site-header .navbar-nav .nav-link {
+  margin-left: auto;
+  margin-right: auto;
   color: #ababb2;
+  padding: 15px;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -31,6 +33,7 @@ tr, th, table {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
 }
 #search_page_container{
   display: flex;
@@ -38,7 +41,6 @@ tr, th, table {
 }
 #search_filters{
   display: flex;
-  flex-direction: column;
   justify-content: center;
   outline: 1px gray solid;
 }
@@ -51,9 +53,7 @@ tr, th, table {
   padding-right: 10px;
 } */
 #search_form{
-  width: 80%;
-  display: flex;
-  justify-content: space-evenly;
+  width: 90%;
   padding-top: 10px;
 }
 #search_form label, #search_form input, #search_form select{
@@ -61,8 +61,4 @@ tr, th, table {
 }
 #search_form label{
   font-size: 1em;
-}
-#form_container{
-  margin-left: auto;
-  margin-right: auto;
 }
