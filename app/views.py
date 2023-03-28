@@ -180,7 +180,7 @@ def correct_pattern(string):
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
 def tire_info(request, pk):
-    current_tire = get_tire(pk)
+    current_tire = get_tire_by_id(pk)
     if current_tire == None:
         return render(
             request, "tire_info.html", {"doesNotExist": "This tire does not exist"}
@@ -285,7 +285,7 @@ def view_outvoices(request):
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
 def delete_tirePage(request, pk):
-    tire = get_tire(pk)
+    tire = get_tire_by_id(pk)
     context = {"tire": tire}
     if tire == None:
         context[
@@ -295,7 +295,7 @@ def delete_tirePage(request, pk):
         answer = request.POST.get("delete").lower()
         if answer == "yes":
             delete_tire(tire)
-            context["tire"] = get_tire(pk)
+            context["tire"] = get_tire_by_id(pk)
             context["message"] = "Tire successfully deleted."
     return render(request, "delete_tire.html", context)
 
