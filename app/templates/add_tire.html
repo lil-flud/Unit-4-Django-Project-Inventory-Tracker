@@ -1,27 +1,27 @@
 {% extends 'home.html' %} {% block content %}
-
-<form action="{% url 'add_tire_form' %}" method="POST">
-  {% csrf_token %}
-  <table>
-    {% for field in form %}
-    <tr>
-      <td>{{field.label}}</td>
-      <td>{{field}}</td>
-      {% if field.label == "Size" %}
-      <td style="padding-left: 16px">
-        Please enter the size in this format: <br>NNN-NN-NN<br>NN x NN.NN-NN <br> N.NN x N
-      </td>
-      {% endif %}
-    </tr>
-    {% endfor %}
-  </table>
-  <button class="btn btn-outline-info" type="submit">Add Tire</button>
-</form>
-{{wrongPattern}}
-{% if successMessage %}
-{{successMessage}} You can finalize your order by viewing the <a href=" {% url 'cart' %}">cart.</a>
-{% endif %}
-{{errorMessage}}
-{% endblock content %} {% comment %} Needs the form to be fully built out,
-should mention that when giving the size dashes should be used like in real
-sizes. Ex: "255-65-17" {% endcomment %}
+<div class="form_container">
+  <form action="{% url 'add_tire_form' %}" method="POST">
+    {% csrf_token %}
+    <table>
+      {% for field in form %}
+      <tr>
+        <td>{{field.label}}</td>
+        <td>{{field}}</td>
+        {% if field.label == "Size" %}
+        <td style="padding-left: 16px">
+          Please enter the size in this format: <br />NNN-NN-NN<br />NN x
+          NN.NN-NN <br />
+          N.NN x N
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+    <button class="btn btn-outline-info" type="submit">Add Tire</button>
+  </form>
+</div>
+{{wrongPattern}} {% if successMessage %} {{successMessage}} You can finalize
+your order by viewing the <a href=" {% url 'cart' %}">cart.</a> {% endif %}
+{{errorMessage}} {% endblock content %} {% comment %} Needs the form to be fully
+built out, should mention that when giving the size dashes should be used like
+in real sizes. Ex: "255-65-17" {% endcomment %}

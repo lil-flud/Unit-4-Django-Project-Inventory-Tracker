@@ -21,7 +21,7 @@ body {
 tr, th, table {
   padding-left: 10px;
   padding-right: 10px;
-  font-size: 1.1em;
+  font-size: 1em;
 }
 
 #block_container{
@@ -60,5 +60,9 @@ tr, th, table {
   height: 34px;
 }
 #search_form label{
-  font-size: 1.2em;
+  font-size: 1em;
+}
+#form_container{
+  margin-left: auto;
+  margin-right: auto;
 }
