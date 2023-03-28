@@ -9,9 +9,8 @@
     <th>Date Sold</th>
   </tr>
   {%for outvoice in outvoices%}
-
   <tr>
-    {% if outvoice.user != "placeholder" %}
+    {% if outvoice.is_finalized and outvoice.tires is not None %}
     <td>{{outvoice.user}}</td>
 
 
@@ -20,10 +19,8 @@
       {%endfor%}
     </td>
     <td>
-      {%for tire in outvoice.tires.all%}
-      {% for order in outvoice.order_quantity.all %}
-      {{order.num_of_tires}} <br>
-      {% endfor %}
+      {%for order in outvoice.order_quantity.all%}
+      {{order.num_of_tires}}<br>
       {%endfor%}
     </td>
     <td>
@@ -31,7 +28,7 @@
       {%endfor%}
     </td>
 
-    <td>total cost: {{outvoice.total_cost}}</td>
+    <td>{{outvoice.total_cost}}</td>
     <td>{{outvoice.date_ordered}}</td>
   </tr>
   {% endif %}

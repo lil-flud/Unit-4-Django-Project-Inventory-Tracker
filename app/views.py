@@ -104,7 +104,6 @@ def add_tire(request):
     errorMessage = ""
     context = {"form": form}
     if request.method == "POST":
-        # print(request.POST)
         form = TireForm(request.POST)
         if form.is_valid():
             # lucas adjustment
@@ -118,6 +117,7 @@ def add_tire(request):
                 quantity = form.cleaned_data["order_qty"]
                 condition = form.cleaned_data["condition"]
                 tire = models.get_tire(brand, line, size, condition)
+                store = request.user.profile.store
                 try:
                     outvoice = Outvoice.objects.latest("id")
                 except:
@@ -133,14 +133,19 @@ def add_tire(request):
                         formtire.quantity,
                         False,
                         outvoice,
+                        store,
                         formtire,
                     )
                 elif tire != None:
                     tire.save()
-                    print(tire)
                     profile.store.inventory.add(tire)
                     create_outvoice(
-                        request.user.username, tire.quantity, False, outvoice, tire
+                        request.user.username,
+                        tire.quantity,
+                        False,
+                        outvoice,
+                        store,
+                        tire,
                     )
                 successMessage = "Tire successfully added"
                 context["successMessage"] = successMessage
@@ -179,17 +184,17 @@ def tire_info(request, pk):
     current_tire = Tire.objects.get(id=pk)
     user = request.user.username
     context = {"tire": current_tire}
+    store = request.user.profile.store
     if request.method == "POST":
         tires_sold = request.POST.get("tires_sold")
         tires_bought = request.POST.get("tires_bought")
         if tires_bought:
             tires_bought = int(tires_bought)
-            # current_tire.quantity += tires_bought
             try:
                 outvoice = Outvoice.objects.latest("id")
             except:
                 outvoice = None
-            create_outvoice(user, tires_bought, False, outvoice, current_tire)
+            create_outvoice(user, tires_bought, False, outvoice, store, current_tire)
 
             current_tire.save()
         if tires_sold:
@@ -210,7 +215,6 @@ def show_cart(request):
     try:
         outvoice = Outvoice.objects.latest("id")
         tires = outvoice.tires.all()
-        print(tires)
         context["outvoice"] = outvoice
         context["tires"] = tires
         if not tires:
@@ -220,7 +224,7 @@ def show_cart(request):
         pass
     else:
         if request.method == "POST":
-            create_outvoice("placeholder", 0, True, outvoice)
+            create_outvoice("placeholder", 0, True, outvoice, None)
             return redirect("home")
     return render(request, "cart.html", context)
 
@@ -266,7 +270,7 @@ def view_invoices(request):
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
 def view_outvoices(request):
-    outvoices = Outvoice.objects.all()
+    outvoices = Outvoice.objects.filter(store=request.user.profile.store)
 
     context = {"outvoices": outvoices}
     return render(request, "view_outvoices.html", context)

@@ -74,6 +74,10 @@ class Outvoice(models.Model):
     total_cost = models.FloatField(null=True)
     tires = models.ManyToManyField(Tire, related_name="outvoices")
     date_ordered = models.DateTimeField(auto_now_add=True, null=True)
+    store = models.ForeignKey(
+        Store, related_name="outvoices", on_delete=models.CASCADE, null=True
+    )
+    is_finalized = models.BooleanField(default=False)
     # order_quantity
 
 
@@ -89,17 +93,18 @@ class OrderQuantity(models.Model):
     )
 
 
-def create_outvoice(user, qty, finished, outvoice, tire=None):
+def create_outvoice(user, qty, finished, outvoice, store, tire=None):
     if outvoice == None:
         outvoice = Outvoice(user=user)
+        outvoice.store = store
         outvoice.save()
     if outvoice.user == "placeholder":
         outvoice.user = user
+        outvoice.store = store
         outvoice.save()
     if not finished:
         update_outvoice(outvoice, tire, qty)
     if finished and outvoice.user != "placeholder":
-        print("look here")
         finalize_outvoice(outvoice)
 
 
@@ -119,17 +124,16 @@ def finalize_outvoice(outvoice):
             user.profile.store.inventory.add(tire)
         tire.quantity += tire.order_qty
         tot_cost += tire.base_price * tire.order_qty
-        print("look here")
         order = OrderQuantity(tire=tire, num_of_tires=tire.order_qty)
         order.save()
         outvoice.order_quantity.add(order)
         # outvoice.order_quantity.tire = tire
         # outvoice.order_quantity.num_of_tires = tire.order_qty
-        print
         outvoice.save()
         tire.order_qty = 0
         tire.save()
     outvoice.total_cost = tot_cost
+    outvoice.is_finalized = True
     outvoice.save()
     newOutvoice = Outvoice(user="placeholder")
     newOutvoice.save()
