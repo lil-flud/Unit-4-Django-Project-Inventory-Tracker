@@ -82,7 +82,7 @@ class Outvoice(models.Model):
 
 
 class OrderQuantity(models.Model):
-    tire = models.ForeignKey(Tire, on_delete=models.PROTECT, null=True, blank=True)
+    tire = models.ForeignKey(Tire, on_delete=models.CASCADE, null=True, blank=True)
     num_of_tires = models.IntegerField(null=True)
     outvoice = models.ForeignKey(
         Outvoice,
