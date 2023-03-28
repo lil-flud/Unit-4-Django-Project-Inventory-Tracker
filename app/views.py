@@ -175,8 +175,11 @@ def correct_pattern(string):
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
 def tire_info(request, pk):
-
-    current_tire = Tire.objects.get(id=pk)
+    current_tire = get_tire(pk)
+    if current_tire == None:
+        return render(
+            request, "tire_info.html", {"doesNotExist": "This tire does not exist"}
+        )
     user = request.user.username
     context = {"tire": current_tire}
     if request.method == "POST":
@@ -275,11 +278,21 @@ def view_outvoices(request):
 # ====DELETE TIRE====
 # user will be able to delete tire
 # please add confirmation message before deletion
-# TODO: implement
 @login_required(login_url="login")
 @allowed_users(allowed_roles="staff")
-def delete_tire(request):
-    context = {}
+def delete_tirePage(request, pk):
+    tire = get_tire(pk)
+    context = {"tire": tire}
+    if tire == None:
+        context[
+            "message"
+        ] = "This tire does not exist or was removed from the database."
+    if request.method == "POST":
+        answer = request.POST.get("delete").lower()
+        if answer == "yes":
+            delete_tire(tire)
+            context["tire"] = get_tire(pk)
+            context["message"] = "Tire successfully deleted."
     return render(request, "delete_tire.html", context)
 
 
