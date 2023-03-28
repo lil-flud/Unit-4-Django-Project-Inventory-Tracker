@@ -1,16 +1,32 @@
 {% extends 'home.html' %} {% block content %}
 <h1>cart</h1>
-
-{%for tire in tires%} {{tire.brand}} {{tire.order_qty}} {{tire.adjusted_price}}
-<br />
-{%endfor%}
+<table border=1 frame=void rules=columns>
+  <tr>
+    <th>
+      Tire
+    </th>
+    <th>
+      qty
+    </th>
+    <th>
+      Price
+    </th>
+  </tr>
+  {%for tire in tires%}
+  <tr>
+    <td> {{tire}} </td>
+    <td>{{tire.order_qty}}</td>
+    <td>{{tire.base_price}}</td>
+  </tr>
+  {%endfor%}
+</table>
 {% if message %}
 {{message}} <p> Why not <a href=" {% url 'home' %}">browse tires</a> or <a href=" {% url 'add_tire_form' %}">add a new
     tire</a> to document your purchases?</p>
 {% endif %}
 {% if not message %}
 <form action="" method="POST">
-  {%csrf_token%}s
+  {%csrf_token%}
   <input type="submit" />
 </form>
 {% endif %}
