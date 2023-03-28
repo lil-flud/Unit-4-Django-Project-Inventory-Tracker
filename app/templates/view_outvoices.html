@@ -14,17 +14,16 @@
     <td>{{outvoice.user}}</td>
 
     <td>
-      {%for tire in outvoice.tires.all%} {% if tire is not None%} {{tire}}
-      <br />
-      {%endif%} {%endfor%}
+      {%for tire in outvoice.tires.all%} {{tire}} <br />
+      {%empty%} Tire removed from Database {%endfor%}
     </td>
     <td>
       {%for order in outvoice.order_quantity.all%} {{order.num_of_tires}}<br />
-      {%endfor%}
+      {%empty%} N/A {%endfor%}
     </td>
     <td>
       {%for tire in outvoice.tires.all%} {{tire.base_price}} <br />
-      {%endfor%}
+      {%empty%} N/A {%endfor%}
     </td>
 
     <td>{{outvoice.total_cost}}</td>
