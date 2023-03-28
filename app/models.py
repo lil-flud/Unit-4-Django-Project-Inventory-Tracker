@@ -214,7 +214,7 @@ def delete_tire(tire):
     tire.delete()
 
 
-def get_tire(pk):
+def get_tire_by_id(pk):
     try:
         tire = Tire.objects.get(id=pk)
         return tire
