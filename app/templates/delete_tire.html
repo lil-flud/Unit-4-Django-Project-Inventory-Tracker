@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if tire is not None %}
+<h3>Brand: {{ tire.brand }}</h3>
+<h3>Line: {{ tire.line }}</h3>
+<h3>Size: {{tire.size}}</h3>
+<h3>Condition: {{tire.get_condition_display}}</h3>
+<h3>Sell-price: {{ tire.adjusted_price }}</h3>
+<h3>Base-price: {{ tire.base_price }}</h3>
+<h3>Quantity in stock: {{ tire.quantity }}</h3>
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="delete">Are you sure you want to delete this tire? </label>
+    <select name="delete" id="delete">
+        <option value="yes">YES</option>
+    </select>
+    <input type="submit" value="CONFIRM DELETE">
+</form>
+{% endif %}
+{{message}}
+
+<a href=" {% url 'home' %}">Return to Home</a>
+
+
+{% endblock content %}

@@ -8,5 +8,8 @@
       </button>
     </div>
   </form>
+  {% if form.errors %}
+  {{form.errors}}
+  {% endif %}
 </div>
 {% endblock content %}
