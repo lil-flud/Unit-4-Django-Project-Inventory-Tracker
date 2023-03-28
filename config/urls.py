@@ -18,10 +18,10 @@ from django.urls import path
 from app import views
 
 urlpatterns = [
-    #login.html
+    # login.html
     path("login/", views.loginView, name="login"),
     path("logout/", views.logoutView, name="logout"),
-    #register.html
+    # register.html
     path("register/", views.registerView, name="register"),
     # view all receipts of outvoices - view_outvoices.html
     path("view_outvoices/", views.view_outvoices, name="view_outvoices"),
@@ -34,10 +34,11 @@ urlpatterns = [
     # add tire form - add_tire.html
     path("add_tire/", views.add_tire, name="add_tire_form"),
     # delete specific tire, "are you sure?" message, confirm button - delete_tire.html
-    path("delete_tire/<pk>/", views.delete_tire, name="delete_tire"),
+    path("delete_tire/<pk>/", views.delete_tirePage, name="delete_tire"),
     # specific tire details - tire_info.html
     path("tire_info/<pk>/", views.tire_info, name="tire_info"),
     # list of tire inventory and search function in home page - home.html
+    path("cart/", views.show_cart, name="cart"),
     path("", views.home, name="home"),
     path("admin/", admin.site.urls),
 ]

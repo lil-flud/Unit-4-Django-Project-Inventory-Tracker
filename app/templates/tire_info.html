@@ -2,11 +2,34 @@
 <nav>
   <h2><a href="{% url 'home' %}">Back To Home Page!</a></h2>
 </nav>
+
+{% if tire is not None %}
 <h3>Brand: {{ tire.brand }}</h3>
 <h3>Line: {{ tire.line }}</h3>
 <h3>Size: {{tire.size}}</h3>
+<h3>Condition: {{tire.get_condition_display}}</h3>
 <h3>Sell-price: {{ tire.adjusted_price }}</h3>
+<h3>Base-price: {{ tire.base_price }}</h3>
 <h3>Quantity in stock: {{ tire.quantity }}</h3>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input name="tires_bought" type="number" value="Quantity" min="1" />
+  <input type="submit" value="Buy Tires" />
+</form>
+<form action="" method="POST">
+  {% csrf_token %}
+  <input name="tires_sold" type="number" max="{{tire.quantity}}" value="Quantity" />
+  <input type="submit" value="Sell Tires" />
+</form>
+
+
+<a class="btn" href=" {% url 'delete_tire' tire.id%}">Delete This Tire</a>
+<a href="{% url 'view_invoices' %}">view invoices</a>
+{% endif %}
+
+{{doesNotExist}}
+
 {% endblock content %} {% comment %} Logan: Basic display of an individual
 tire's info. {% endcomment %} {% comment %} Logan: Potentially add an update
 button so user can adjust quantities directly without having to fill out form.
