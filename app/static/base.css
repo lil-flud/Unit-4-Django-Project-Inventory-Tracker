@@ -62,3 +62,8 @@ tr, th, table {
 #search_form label{
   font-size: 1em;
 }
+
+#add_form label, #add_form input, #add_form select{
+  width: 200px;
+  height: 40px;
+}
