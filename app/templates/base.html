@@ -30,14 +30,17 @@
             {% if request.path != "/view_outvoices/" %}
             <a class="nav-item nav-link" href=" {% url 'view_outvoices' %}">Outvoices</a>
             {% endif %}
+            {% if request.path != "/view_invoices/" %}
+            <a class="nav-item nav-link" href=" {% url 'view_invoices' %}">Invoices</a>
+            {% endif %}
             {% if request.path != "/cart/" %}
             <a class="nav-item nav-link" href=" {% url 'cart' %}">Cart</a>
             {% endif %}
-            {% if request.path != "/logout/" %}
-            <a class="nav-item nav-link" href=" {% url 'logout' %}">Logout</a>
-            {% endif %}
             {% if request.path != "/" %}
             <a class="nav-item nav-link" href=" {% url 'home' %}">Home</a>
+            {% endif %}
+            {% if request.path != "/logout/" %}
+            <a class="nav-item nav-link" href=" {% url 'logout' %}">Logout</a>
             {% endif %}
             <!-- prettier-ignore -->
             {% endif %}
